@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Catalogue — AÉRIS</title>
+<meta name="description" content="Catalogue de moustiquaires sur mesure : fenêtre, porte, coulissante, plissée, enroulable, magnétique. Filtrez par type, prix et popularité." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .cat-layout{display:grid;grid-template-columns:260px 1fr;gap:34px;align-items:start}
+  .filters{position:sticky;top:90px;background:#fff;border:1px solid var(--ligne);border-radius:var(--r);padding:24px}
+  .filters h4{font-family:var(--data);font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#4a4c45;margin:18px 0 12px}
+  .filters h4:first-child{margin-top:0}
+  .fopt{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:14.5px;cursor:pointer}
+  .fopt input{accent-color:var(--sauge);width:16px;height:16px}
+  .range-row{display:flex;justify-content:space-between;font-family:var(--data);font-weight:700;font-size:13px;color:var(--gris);margin-top:6px}
+  .filters input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:var(--ligne);outline:none;margin-top:8px}
+  .filters input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--sauge);cursor:pointer;border:3px solid #fff}
+  .filters input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--sauge);border:3px solid #fff;cursor:pointer}
+  .toolbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;gap:16px;flex-wrap:wrap}
+  .toolbar .count{font-family:var(--data);font-weight:700;color:var(--gris);font-size:14px}
+  .toolbar select{font-family:var(--data);font-weight:600;font-size:14px;padding:10px 16px;border:1px solid var(--ligne);border-radius:100px;background:#fff;cursor:pointer}
+  .empty{padding:60px 20px;text-align:center;color:var(--gris);border:1px dashed var(--ligne);border-radius:var(--r)}
+  .filters-toggle{display:none}
+  @media(max-width:860px){
+    .cat-layout{grid-template-columns:1fr}
+    .filters{position:static;display:none}
+    .filters.open{display:block}
+    .filters-toggle{display:inline-flex}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='contact.html'"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg><span class="cart-count">0</span></button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu"><a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> Catalogue</div>
+    <h1>Le catalogue</h1>
+    <p>Une moustiquaire pour chaque ouverture. Toutes nos références sont fabriquées sur mesure ; les prix indiqués sont des prix de départ.</p>
+  </div>
+</div>
+
+<section style="padding-top:48px">
+  <div class="wrap">
+    <div class="cat-layout">
+      <aside class="filters" id="filters">
+        <h4>Type</h4>
+        <div id="ftypes"></div>
+        <h4>Prix de départ max</h4>
+        <input type="range" id="priceR" min="39" max="259" value="259" step="10">
+        <div class="range-row"><span>39 €</span><span id="priceV">259 €</span></div>
+        <h4>Couleur</h4>
+        <div id="fcolors"></div>
+      </aside>
+
+      <div>
+        <div class="toolbar">
+          <button class="btn btn-outline btn-sm filters-toggle" onclick="document.getElementById('filters').classList.toggle('open')">Filtres</button>
+          <span class="count" id="count"></span>
+          <select id="sort">
+            <option value="pop">Tri : popularité</option>
+            <option value="asc">Prix croissant</option>
+            <option value="desc">Prix décroissant</option>
+            <option value="new">Nouveautés</option>
+          </select>
+        </div>
+        <div class="prod-grid cols3" id="grid"></div>
+        <div class="empty" id="empty" style="display:none">Aucun produit ne correspond à ces filtres.<br><button class="btn btn-outline btn-sm" style="margin-top:14px" onclick="resetFilters()">Réinitialiser</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe. L'air frais sans les insectes.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte battante</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">Guide de mesure</a><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const CATALOG=[
+  {id:'fenetre',n:'Moustiquaire fenêtre',type:'Fenêtre',from:69,pop:98,new:false,colors:['blanc','anthracite','brun'],d:'Cadre alu fin, pose sans perçage.',kw:'window,frame,house',lock:41,tag:'Best-seller'},
+  {id:'fixe',n:'Cadre fixe',type:'Cadre fixe',from:59,pop:80,new:false,colors:['blanc','anthracite'],d:'Solution permanente la plus économique.',kw:'window,glass,modern',lock:51,tag:null},
+  {id:'enroul',n:'Porte enroulable',type:'Enroulable',from:149,pop:88,new:false,colors:['blanc','anthracite','brun'],d:'Rappel automatique, usage quotidien.',kw:'door,house,entrance',lock:42,tag:null},
+  {id:'plissee',n:'Plissée premium',type:'Plissée',from:189,pop:92,new:false,colors:['anthracite','blanc','sable'],d:'Repli accordéon, ultra discrète.',kw:'patio,door,glass',lock:43,tag:'Premium'},
+  {id:'porte',n:'Porte battante',type:'Porte',from:159,pop:84,new:false,colors:['blanc','anthracite','brun'],d:'Ouverture pivotante, fermeture aimantée.',kw:'door,wood,house',lock:52,tag:null},
+  {id:'couliss',n:'Baie coulissante',type:'Coulissante',from:199,pop:90,new:true,colors:['anthracite','blanc','sable'],d:'Grandes largeurs, glissement silencieux.',kw:'sliding,door,terrace',lock:44,tag:'Nouveau'},
+  {id:'magnet',n:'Rideau magnétique',type:'Magnétique',from:39,pop:70,new:false,colors:['blanc','anthracite'],d:'Installation express sans outils.',kw:'curtain,door,home',lock:53,tag:null},
+  {id:'mesure',n:'Sur mesure +',type:'Sur mesure',from:229,pop:86,new:true,colors:['anthracite','sable','brun'],d:'Configurations spéciales et grandes dimensions.',kw:'large,window,villa',lock:54,tag:'Nouveau'},
+];
+const TYPES=[...new Set(CATALOG.map(p=>p.type))];
+const COLORS={blanc:'#EDEAE3',anthracite:'#33373A',brun:'#5A4632',sable:'#C9B896'};
+let f={types:new Set(),colors:new Set(),max:259,sort:'pop'};
+
+document.getElementById('ftypes').innerHTML=TYPES.map(t=>`<label class="fopt"><input type="checkbox" value="${t}" data-ftype>${t}</label>`).join('');
+document.getElementById('fcolors').innerHTML=Object.keys(COLORS).map(c=>`<label class="fopt"><input type="checkbox" value="${c}" data-fcolor><span style="width:16px;height:16px;border-radius:4px;background:${COLORS[c]};border:1px solid var(--ligne)"></span>${c.charAt(0).toUpperCase()+c.slice(1)}</label>`).join('');
+
+function render(){
+  let list=CATALOG.filter(p=>
+    (f.types.size===0||f.types.has(p.type)) &&
+    (f.colors.size===0||p.colors.some(c=>f.colors.has(c))) &&
+    p.from<=f.max
+  );
+  if(f.sort==='asc')list.sort((a,b)=>a.from-b.from);
+  else if(f.sort==='desc')list.sort((a,b)=>b.from-a.from);
+  else if(f.sort==='new')list.sort((a,b)=>(b.new-a.new)||b.pop-a.pop);
+  else list.sort((a,b)=>b.pop-a.pop);
+
+  document.getElementById('count').textContent=list.length+' produit'+(list.length>1?'s':'');
+  document.getElementById('empty').style.display=list.length?'none':'block';
+  document.getElementById('grid').innerHTML=list.map(p=>`
+    <article class="card">
+      <a href="produit.html?p=${p.id}" class="thumb ph">${p.tag?`<span class="tag">${p.tag}</span>`:''}<img data-kw="${p.kw}" data-w="600" data-h="450" data-lock="${p.lock}" alt="${p.n}"></a>
+      <div class="body">
+        <h3>${p.n}</h3><p class="desc">${p.d}</p>
+        <div class="foot"><span class="from"><small>dès </small>${p.from} €</span><a href="produit.html?p=${p.id}" class="btn btn-outline btn-sm">Voir</a></div>
+      </div>
+    </article>`).join('');
+  mountPhotos();
+}
+function resetFilters(){
+  f={types:new Set(),colors:new Set(),max:259,sort:'pop'};
+  document.querySelectorAll('[data-ftype],[data-fcolor]').forEach(c=>c.checked=false);
+  document.getElementById('priceR').value=259;document.getElementById('priceV').textContent='259 €';
+  document.getElementById('sort').value='pop';render();
+}
+document.addEventListener('change',e=>{
+  if(e.target.matches('[data-ftype]')){e.target.checked?f.types.add(e.target.value):f.types.delete(e.target.value);render();}
+  if(e.target.matches('[data-fcolor]')){e.target.checked?f.colors.add(e.target.value):f.colors.delete(e.target.value);render();}
+});
+document.getElementById('priceR').addEventListener('input',e=>{f.max=+e.target.value;document.getElementById('priceV').textContent=e.target.value+' €';render();});
+document.getElementById('sort').addEventListener('change',e=>{f.sort=e.target.value;render();});
+render();
+</script>
+</body>
+</html>

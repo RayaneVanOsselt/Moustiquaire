@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FAQ — AÉRIS</title>
+<meta name="description" content="Toutes les réponses sur les moustiquaires sur mesure AÉRIS : commandes, livraison, installation, garantie, paiement, retours et sur-mesure." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .faq-layout{display:grid;grid-template-columns:230px 1fr;gap:40px;align-items:start}
+  .faq-nav{position:sticky;top:90px;display:flex;flex-direction:column;gap:4px}
+  .faq-nav a{font-family:var(--data);font-weight:600;font-size:14px;padding:10px 14px;border-radius:10px;color:var(--gris);transition:.2s}
+  .faq-nav a:hover{background:var(--sable-clair);color:var(--anthracite)}
+  .faq-cat{margin-bottom:46px;scroll-margin-top:90px}
+  .faq-cat h2{font-size:24px;margin-bottom:18px}
+  .acc-item{border-bottom:1px solid var(--ligne)}
+  .acc-q{display:flex;justify-content:space-between;gap:16px;width:100%;background:none;border:none;text-align:left;font-family:var(--data);font-weight:700;font-size:15.5px;padding:18px 0;cursor:pointer;color:var(--anthracite)}
+  .acc-q .ico{transition:transform .3s;color:var(--sauge);flex:none;font-size:18px}
+  .acc-item.open .acc-q .ico{transform:rotate(45deg)}
+  .acc-a{max-height:0;overflow:hidden;transition:max-height .35s ease;color:var(--gris);font-size:15px}
+  .acc-item.open .acc-a{max-height:400px}
+  .acc-a p{padding:0 0 18px;max-width:70ch}
+  .faq-search{width:100%;padding:14px 18px;border:1px solid var(--ligne);border-radius:100px;font-family:var(--body);font-size:15px;margin-bottom:34px;outline:none}
+  .faq-search:focus{border-color:var(--sauge)}
+  @media(max-width:860px){.faq-layout{grid-template-columns:1fr}.faq-nav{position:static;flex-direction:row;flex-wrap:wrap}}
+</style>
+</head>
+<body>
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links"><a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav>
+    <div class="nav-cta"><a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='contact.html'"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg><span class="cart-count">0</span></button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu"><a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap"><div class="crumb"><a href="index.html">Accueil</a> <span>›</span> FAQ</div><h1>Questions fréquentes</h1><p>Tout ce qu'il faut savoir avant et après votre commande. Une question reste sans réponse ? Écrivez-nous.</p></div>
+</div>
+
+<section>
+  <div class="wrap">
+    <input type="text" class="faq-search" id="search" placeholder="Rechercher une question…" />
+    <div class="faq-layout">
+      <nav class="faq-nav" id="faqNav"></nav>
+      <div id="faqBody"></div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaband">
+  <div class="wrap box"><div><h2>Vous ne trouvez pas votre réponse&nbsp;?</h2><p>Notre équipe répond généralement sous 24 h ouvrées.</p></div>
+  <a href="contact.html" class="btn btn-primary">Nous contacter</a></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const FAQ={
+  'Commandes':[
+    ['Comment passer commande ?','Configurez votre moustiquaire, ajoutez-la au panier puis suivez le tunnel de commande. Vous recevez une confirmation par e-mail immédiatement.'],
+    ['Puis-je commander sans créer de compte ?','Oui, la commande invité est possible. Créer un compte vous permet toutefois de suivre vos commandes et de retrouver vos configurations.'],
+    ['Puis-je modifier ma commande après l\'achat ?','Tant que la fabrication n\'a pas démarré (généralement 24 h), contactez-nous : nous ajustons dimensions ou finitions si possible.'],
+    ['Proposez-vous des devis ?','Oui. Depuis le configurateur ou la page contact, demandez un devis gratuit, sans engagement, valable 30 jours.'],
+    ['Y a-t-il un minimum de commande ?','Non, vous pouvez commander une seule moustiquaire.'],
+  ],
+  'Livraison':[
+    ['Quels sont les délais de livraison ?','Comptez 10 à 21 jours ouvrés selon le modèle, fabrication sur mesure incluse. Le délai exact s\'affiche dans le configurateur.'],
+    ['Livrez-vous en Belgique et en Europe ?','Oui, nous livrons en Belgique et dans l\'Union européenne. Les frais et délais s\'affichent au panier selon votre adresse.'],
+    ['Comment suivre mon colis ?','Un lien de suivi vous est envoyé par e-mail dès l\'expédition.'],
+    ['Que faire si mon colis est endommagé ?','Refusez le colis ou émettez des réserves, puis contactez-nous sous 48 h : nous le remplaçons sans frais.'],
+    ['Puis-je être livré en point relais ?','Oui pour les petits modèles. Les grandes dimensions sont livrées à domicile par transporteur.'],
+  ],
+  'Installation':[
+    ['L\'installation est-elle difficile ?','Non. La majorité des modèles se posent sans perçage en quelques minutes, notice illustrée fournie.'],
+    ['Faut-il des outils ?','Pour les modèles à clips, aucun outil. Pour une pose vissée, un tournevis suffit.'],
+    ['Proposez-vous la pose à domicile ?','Sur certaines zones, oui. Indiquez-le dans votre demande de devis pour connaître la disponibilité.'],
+    ['Puis-je retirer la moustiquaire l\'hiver ?','Oui, les modèles à cadre sont démontables et se rangent facilement.'],
+    ['Comment mesurer correctement ?','Notre guide de mesure détaille chaque type d\'ouverture. En cas de doute, envoyez-nous une photo.'],
+  ],
+  'Garantie':[
+    ['Quelle est la durée de garantie ?','5 ans sur les pièces et les mécanismes, dans des conditions normales d\'utilisation.'],
+    ['La toile est-elle garantie ?','La toile est garantie contre les défauts de fabrication. L\'usure liée à un mauvais entretien n\'est pas couverte.'],
+    ['Comment faire jouer la garantie ?','Contactez-nous avec votre numéro de commande et une photo. Nous traitons la demande sous 48 h ouvrées.'],
+    ['Que couvre exactement la garantie ?','Les défauts de matière et de fabrication, les mécanismes (enrouleur, charnières, aimants). Les dommages accidentels en sont exclus.'],
+  ],
+  'Paiement':[
+    ['Quels moyens de paiement acceptez-vous ?','Carte bancaire, Bancontact, Apple Pay, Google Pay via Stripe, ainsi que PayPal.'],
+    ['Le paiement est-il sécurisé ?','Oui, toutes les transactions sont chiffrées (SSL) et traitées par des prestataires certifiés. Nous ne stockons aucune donnée bancaire.'],
+    ['Puis-je payer en plusieurs fois ?','Le paiement en plusieurs fois est proposé selon le montant et votre pays, au moment du paiement.'],
+    ['Recevrai-je une facture ?','Oui, une facture est jointe à l\'e-mail de confirmation et disponible dans votre compte.'],
+  ],
+  'Retours':[
+    ['Puis-je retourner une moustiquaire sur mesure ?','Les produits fabriqués sur mesure ne bénéficient pas du droit de rétractation standard, sauf défaut. Nous vérifions toujours votre configuration avant fabrication.'],
+    ['Que se passe-t-il en cas d\'erreur de notre part ?','Si la moustiquaire ne correspond pas à votre commande validée, nous la refaisons à nos frais.'],
+    ['Et si je me suis trompé dans les mesures ?','Contactez-nous : selon l\'avancement, nous cherchons une solution (ajustement, geste commercial).'],
+    ['Comment signaler un problème ?','Via la page contact ou par e-mail, avec votre numéro de commande et une photo.'],
+  ],
+  'Sur mesure':[
+    ['Quelles dimensions maximales ?','Jusqu\'à 2400 mm de large et 2600 mm de haut selon les modèles. Au-delà, notre service Sur mesure + étudie votre cas.'],
+    ['Puis-je choisir un coloris RAL spécifique ?','Oui, en option RAL sur mesure pour assortir vos menuiseries.'],
+    ['Gérez-vous les formes spéciales ?','Les formes atypiques (cintres, trapèzes) sont possibles via un devis personnalisé.'],
+    ['Quelles toiles proposez-vous ?','Fibre de verre, aluminium, anti-pollen, anti-griffe (Pet) et solaire occultante.'],
+    ['Puis-je commander juste la toile de remplacement ?','Oui, indiquez votre référence de commande et nous préparons une toile aux bonnes dimensions.'],
+  ],
+};
+const nav=document.getElementById('faqNav'),body=document.getElementById('faqBody');
+nav.innerHTML=Object.keys(FAQ).map(c=>`<a href="#cat-${c.replace(/\s/g,'')}">${c}</a>`).join('');
+body.innerHTML=Object.entries(FAQ).map(([cat,items])=>`
+  <div class="faq-cat" id="cat-${cat.replace(/\s/g,'')}">
+    <h2>${cat}</h2>
+    ${items.map(([q,a])=>`<div class="acc-item" data-q="${q.toLowerCase()}"><button class="acc-q">${q}<span class="ico">+</span></button><div class="acc-a"><p>${a}</p></div></div>`).join('')}
+  </div>`).join('');
+body.addEventListener('click',e=>{const b=e.target.closest('.acc-q');if(b)b.parentElement.classList.toggle('open');});
+document.getElementById('search').addEventListener('input',e=>{
+  const q=e.target.value.toLowerCase().trim();
+  document.querySelectorAll('.acc-item').forEach(it=>{
+    const txt=it.dataset.q+' '+it.querySelector('.acc-a').textContent.toLowerCase();
+    it.style.display=(!q||txt.includes(q))?'block':'none';
+  });
+  document.querySelectorAll('.faq-cat').forEach(cat=>{
+    const any=[...cat.querySelectorAll('.acc-item')].some(it=>it.style.display!=='none');
+    cat.style.display=any?'block':'none';
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Configurateur — AÉRIS</title>
+<meta name="description" content="Configurez votre moustiquaire sur mesure : type, dimensions, toile, coloris, accessoires. Prix, délai et livraison en temps réel." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .config-grid{display:grid;grid-template-columns:1fr .92fr;gap:36px;align-items:start;margin-top:-40px;position:relative;z-index:5}
+  .panel{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:32px;box-shadow:var(--ombre)}
+  .field{margin-bottom:24px}
+  .field>label{font-family:var(--data);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#4a4c45;display:block;margin-bottom:12px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px}
+  .chip{font-family:var(--data);font-weight:600;font-size:13.5px;padding:9px 15px;border-radius:100px;border:1px solid var(--ligne);background:#fff;cursor:pointer;transition:.2s}
+  .chip:hover{border-color:var(--sauge)}
+  .chip.active{background:var(--sauge);color:#fff;border-color:var(--sauge)}
+  .dims{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .dim{background:var(--sable-clair);border:1px solid var(--ligne);border-radius:14px;padding:14px 16px}
+  .dim label{font-size:12.5px;color:var(--gris);font-family:var(--data);font-weight:600}
+  .dim .row{display:flex;align-items:baseline;gap:7px;margin-top:5px}
+  .dim input[type=number]{width:100%;border:none;background:transparent;font-family:var(--data);font-weight:800;font-size:26px;color:var(--anthracite);outline:none;-moz-appearance:textfield}
+  .dim .unit{font-family:var(--data);font-weight:700;color:var(--gris);font-size:15px}
+  input[type=range]{-webkit-appearance:none;width:100%;height:4px;border-radius:4px;background:var(--ligne);margin-top:12px;outline:none}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--sauge);cursor:pointer;border:3px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+  input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--sauge);cursor:pointer;border:3px solid #fff}
+  .swatches{display:flex;gap:11px;flex-wrap:wrap}
+  .sw{width:40px;height:40px;border-radius:11px;cursor:pointer;border:2px solid transparent;transition:.2s}
+  .sw.active{border-color:var(--dore);box-shadow:0 0 0 3px rgba(198,167,106,.18)}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--ligne);border-radius:13px;padding:12px 15px;cursor:pointer;transition:.2s}
+  .opt:hover{border-color:var(--sauge)}
+  .opt.active{border-color:var(--sauge);background:rgba(107,142,117,.06)}
+  .opt .l{display:flex;align-items:center;gap:11px;font-size:14.5px}
+  .opt .check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--ligne);display:flex;align-items:center;justify-content:center;flex:none}
+  .opt.active .check{background:var(--sauge);border-color:var(--sauge)}
+  .opt.active .check::after{content:"";width:5px;height:9px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);margin-top:-2px}
+  .opt .p{font-family:var(--data);font-weight:700;font-size:13.5px;color:var(--sauge)}
+  .preview-col{position:sticky;top:90px;display:flex;flex-direction:column;gap:18px}
+  .preview{background:linear-gradient(160deg,#fff,#f6f2ea);border:1px solid var(--ligne);border-radius:var(--r-l);padding:30px;display:flex;align-items:center;justify-content:center;min-height:320px}
+  .pv-stage{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .pv-frame{border-style:solid;border-radius:6px;transition:all .45s cubic-bezier(.2,.7,.3,1);position:relative;
+    background-image:repeating-linear-gradient(0deg,rgba(40,55,45,.16) 0 1px,transparent 1px 5px),repeating-linear-gradient(90deg,rgba(40,55,45,.16) 0 1px,transparent 1px 5px);box-shadow:var(--ombre)}
+  .pv-frame .pv-grip{position:absolute;top:50%;right:-4px;transform:translateY(-50%);width:7px;height:30px;border-radius:4px;background:var(--dore)}
+  .pv-dim{font-family:var(--data);font-weight:700;font-size:12.5px;color:var(--gris);letter-spacing:.05em}
+  .price-card{background:var(--sauge-fonce);color:#fff;border-radius:var(--r-l);padding:28px}
+  .price-card .lbl{font-family:var(--data);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#aebfb0}
+  .price-card .amount{font-family:var(--data);font-weight:800;font-size:48px;letter-spacing:-.02em;line-height:1;margin:8px 0 4px}
+  .price-card .amount span.eur{font-size:26px;color:var(--dore)}
+  .price-card .vat{font-size:12.5px;color:#aebfb0}
+  .price-meta{display:flex;gap:10px;margin:22px 0;border-top:1px solid rgba(255,255,255,.12);padding-top:20px}
+  .price-meta .m{flex:1}
+  .price-meta .m .k{font-size:11px;color:#aebfb0;font-family:var(--data);font-weight:600;letter-spacing:.04em}
+  .price-meta .m .v{font-family:var(--data);font-weight:700;font-size:15px;color:#fff;margin-top:3px}
+  .price-actions{display:flex;flex-direction:column;gap:10px}
+  @media(max-width:980px){.config-grid{grid-template-columns:1fr}.preview-col{position:static}.panel{padding:24px}.dims{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='contact.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    <a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> Configurateur</div>
+    <h1>Composez votre moustiquaire</h1>
+    <p>Choisissez le type, vos dimensions, la toile et les finitions. Le prix, le délai et l'estimation de livraison se mettent à jour instantanément.</p>
+  </div>
+</div>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="config-grid">
+      <div class="panel">
+        <div class="field"><label>Type de moustiquaire</label><div class="chips" id="types"></div></div>
+        <div class="field">
+          <label>Dimensions de l'ouverture</label>
+          <div class="dims">
+            <div class="dim"><label for="w">Largeur</label><div class="row"><input id="w" type="number" value="800" min="200" max="2400"><span class="unit">mm</span></div><input id="wr" type="range" min="200" max="2400" value="800" step="10"></div>
+            <div class="dim"><label for="h">Hauteur</label><div class="row"><input id="h" type="number" value="1200" min="200" max="2600"><span class="unit">mm</span></div><input id="hr" type="range" min="200" max="2600" value="1200" step="10"></div>
+          </div>
+        </div>
+        <div class="field"><label>Toile / matériau</label><div class="chips" id="toiles"></div></div>
+        <div class="field"><label>Coloris du cadre</label><div class="swatches" id="swatches"></div></div>
+        <div class="field" style="margin-bottom:4px"><label>Accessoires</label><div class="opts" id="opts"></div></div>
+      </div>
+
+      <div class="preview-col">
+        <div class="preview"><div class="pv-stage"><div class="pv-frame" id="pvFrame"><span class="pv-grip"></span></div><div class="pv-dim" id="pvDim">800 × 1200 mm</div></div></div>
+        <div class="price-card">
+          <div class="lbl">Prix estimé TTC</div>
+          <div class="amount"><span class="eur">€</span><span id="price">0</span></div>
+          <div class="vat" id="vat">dont TVA 21 % · 0 €</div>
+          <div class="price-meta">
+            <div class="m"><div class="k">FABRICATION</div><div class="v" id="lead">—</div></div>
+            <div class="m"><div class="k">LIVRAISON</div><div class="v" id="ship">—</div></div>
+            <div class="m"><div class="k">SURFACE</div><div class="v" id="area">—</div></div>
+          </div>
+          <div class="price-actions">
+            <button class="btn btn-gold btn-block" id="addBtn">Ajouter au panier</button>
+            <button class="btn btn-ghost btn-block" onclick="location.href='contact.html'">Envoyer en précommande / devis</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe. L'air frais sans les insectes.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte battante</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">Guide de mesure</a><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const TYPES=[
+  {id:'fixe',n:'Cadre fixe',base:59,ppm2:42,lead:[7,12]},
+  {id:'fenetre',n:'Fenêtre',base:69,ppm2:48,lead:[10,15]},
+  {id:'enroul',n:'Enroulable',base:149,ppm2:62,lead:[12,18]},
+  {id:'plissee',n:'Plissée',base:189,ppm2:78,lead:[14,21]},
+  {id:'porte',n:'Porte battante',base:159,ppm2:58,lead:[12,18]},
+  {id:'couliss',n:'Coulissante',base:199,ppm2:66,lead:[14,21]},
+  {id:'magnet',n:'Magnétique',base:39,ppm2:30,lead:[5,9]},
+  {id:'mesure',n:'Sur mesure +',base:229,ppm2:88,lead:[18,25]},
+];
+const TOILES=[
+  {id:'fibre',n:'Fibre de verre',mult:1.00},
+  {id:'alu',n:'Aluminium',mult:1.35},
+  {id:'pollen',n:'Anti-pollen',mult:1.55},
+  {id:'pet',n:'Anti-griffe (Pet)',mult:1.80},
+  {id:'solaire',n:'Solaire occultante',mult:1.65},
+];
+const COLORS=[
+  {id:'blanc',n:'Blanc',hex:'#EDEAE3'},
+  {id:'brun',n:'Brun',hex:'#5A4632'},
+  {id:'anthracite',n:'Anthracite',hex:'#33373A'},
+  {id:'sable',n:'Sable',hex:'#C9B896'},
+  {id:'noir',n:'Noir mat',hex:'#1C1C1C'},
+  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#6B8E75,#C6A76A)'},
+];
+const OPTS=[
+  {id:'poignee',n:'Poignée premium',p:19},
+  {id:'brosse',n:'Brosse anti-poussière',p:12},
+  {id:'fix',n:'Kit de fixation sans perçage',p:24},
+  {id:'renfort',n:'Cadre renforcé',p:35},
+];
+const RAL_SUP=25;
+let state={type:'fenetre',toile:'fibre',color:'blanc',opts:new Set(),w:800,h:1200};
+const $=s=>document.querySelector(s);
+
+function build(){
+  $('#types').innerHTML=TYPES.map(t=>`<button class="chip${t.id===state.type?' active':''}" data-t="${t.id}">${t.n}</button>`).join('');
+  $('#toiles').innerHTML=TOILES.map(t=>`<button class="chip${t.id===state.toile?' active':''}" data-to="${t.id}">${t.n}</button>`).join('');
+  $('#swatches').innerHTML=COLORS.map(c=>`<button class="sw${c.id===state.color?' active':''}" data-c="${c.id}" title="${c.n}" aria-label="${c.n}" style="background:${c.hex}"></button>`).join('');
+  $('#opts').innerHTML=OPTS.map(o=>`<button class="opt${state.opts.has(o.id)?' active':''}" data-o="${o.id}"><span class="l"><span class="check"></span>${o.n}</span><span class="p">+${o.p} €</span></button>`).join('');
+  $('#types').onclick=e=>{const b=e.target.closest('[data-t]');if(b){state.type=b.dataset.t;build();update();}};
+  $('#toiles').onclick=e=>{const b=e.target.closest('[data-to]');if(b){state.toile=b.dataset.to;build();update();}};
+  $('#swatches').onclick=e=>{const b=e.target.closest('[data-c]');if(b){state.color=b.dataset.c;build();update();}};
+  $('#opts').onclick=e=>{const b=e.target.closest('[data-o]');if(b){const id=b.dataset.o;state.opts.has(id)?state.opts.delete(id):state.opts.add(id);build();update();}};
+}
+function bindDim(numId,rangeId,key,min,max){
+  const num=$(numId),rng=$(rangeId);
+  const set=v=>{v=Math.max(min,Math.min(max,Math.round(v)||min));state[key]=v;num.value=v;rng.value=v;update();};
+  num.addEventListener('input',()=>set(+num.value));
+  rng.addEventListener('input',()=>set(+rng.value));
+}
+let displayed=0;
+function compute(){
+  const t=TYPES.find(x=>x.id===state.type),to=TOILES.find(x=>x.id===state.toile);
+  const area=(state.w/1000)*(state.h/1000);
+  let price=t.base+area*t.ppm2*to.mult;
+  if(state.color==='ral')price+=RAL_SUP;
+  OPTS.forEach(o=>{if(state.opts.has(o.id))price+=o.p;});
+  return{price:Math.round(price),area,lead:t.lead};
+}
+const fmt=n=>n.toLocaleString('fr-BE');
+function update(){
+  const {price,area,lead}=compute();
+  cancelAnimationFrame(update._raf);
+  const start=displayed,t0=performance.now(),dur=420;
+  const tick=now=>{const k=Math.min(1,(now-t0)/dur);const e=1-Math.pow(1-k,3);displayed=Math.round(start+(price-start)*e);$('#price').textContent=fmt(displayed);if(k<1)update._raf=requestAnimationFrame(tick);};
+  update._raf=requestAnimationFrame(tick);
+  $('#vat').textContent='dont TVA 21 % · '+fmt(Math.round(price-price/1.21))+' €';
+  $('#area').textContent=area.toFixed(2).replace('.',',')+' m²';
+  $('#lead').textContent=lead[0]+'–'+lead[1]+' j';
+  const d=new Date();d.setDate(d.getDate()+lead[1]+3);
+  $('#ship').textContent='~ '+d.toLocaleDateString('fr-BE',{day:'2-digit',month:'short'});
+  $('#pvDim').textContent=state.w+' × '+state.h+' mm';
+  const maxPx=210,ratio=state.w/state.h;let pw,ph;
+  if(ratio>=1){pw=maxPx;ph=maxPx/ratio;}else{ph=maxPx;pw=maxPx*ratio;}
+  pw=Math.max(70,pw);ph=Math.max(70,ph);
+  const col=COLORS.find(c=>c.id===state.color),frame=$('#pvFrame');
+  frame.style.width=pw+'px';frame.style.height=ph+'px';
+  frame.style.borderWidth=(state.opts.has('renfort')?'11px':'8px');
+  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#6B8E75,#C6A76A) 1';frame.style.borderColor='#6B8E75';}
+  else{frame.style.borderImage='none';frame.style.borderColor=col.hex;}
+}
+build();
+bindDim('#w','#wr','w',200,2400);
+bindDim('#h','#hr','h',200,2600);
+update();
+$('#addBtn').addEventListener('click',()=>{
+  const {price}=compute();
+  const t=TYPES.find(x=>x.id===state.type);
+  Cart.add({name:'Moustiquaire '+t.n+' '+state.w+'×'+state.h,price,qty:1});
+  toast('Moustiquaire ajoutée au panier · '+fmt(price)+' €');
+});
+</script>
+</body>
+</html>

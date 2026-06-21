@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notre savoir-faire — AÉRIS</title>
+<meta name="description" content="L'histoire, la vision et les valeurs d'AÉRIS : la moustiquaire sur mesure fabriquée en Europe, pensée pour durer." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .vals{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .val{background:#fff;border:1px solid var(--ligne);border-radius:var(--r);padding:28px}
+  .val .ic{width:46px;height:46px;border-radius:13px;background:var(--sable-clair);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+  .val .ic svg{width:23px;height:23px;stroke:var(--sauge);fill:none;stroke-width:1.7}
+  .val h3{font-size:18px;margin-bottom:8px}.val p{font-size:14.5px;color:var(--gris)}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;text-align:center}
+  .stat b{font-family:var(--data);font-weight:800;font-size:40px;color:var(--sauge-fonce);display:block}
+  .stat span{color:var(--gris);font-size:14px}
+  .team{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .member .av{aspect-ratio:1;border-radius:var(--r);overflow:hidden;margin-bottom:14px}
+  .member b{font-size:16px}.member span{color:var(--gris);font-size:14px;display:block}
+  @media(max-width:860px){.vals,.team{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links"><a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav>
+    <div class="nav-cta"><a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='contact.html'"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg><span class="cart-count">0</span></button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu"><a href="produits.html">Produits</a><a href="configurateur.html">Configurateur</a><a href="savoir-faire.html">Savoir-faire</a><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> Savoir-faire</div>
+    <h1>Le confort sur mesure, fabriqué en Europe</h1>
+    <p>AÉRIS est né d'une conviction simple : une moustiquaire ne devrait jamais vous obliger à choisir entre l'air frais et la beauté de votre intérieur.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap split reveal">
+    <div class="media ph"><img data-kw="aluminium,workshop,manufacturing" data-lock="61" alt="Atelier"></div>
+    <div>
+      <span class="eyebrow">Notre histoire</span>
+      <h2>D'un atelier familial à la référence du sur-mesure</h2>
+      <p>Tout a commencé par un constat : les moustiquaires standard du commerce ferment mal, vieillissent vite et défigurent les fenêtres. Nous avons décidé de faire l'inverse — mesurer chaque ouverture, choisir des matériaux durables, et soigner la finition comme une menuiserie.</p>
+      <p>Aujourd'hui, chaque AÉRIS est dessinée à partir de vos dimensions et assemblée à la main dans nos ateliers européens, puis contrôlée pièce par pièce avant de partir chez vous.</p>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head center reveal"><span class="eyebrow">Nos valeurs</span><h2>Ce qui guide chaque moustiquaire</h2></div>
+    <div class="vals">
+      <div class="val reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 7l8-4 8 4-8 4-8-4z"/><path d="M4 12l8 4 8-4"/></svg></div><h3>Le sur-mesure, vraiment</h3><p>Pas de dimension standard imposée. Vos mesures exactes, au millimètre près.</p></div>
+      <div class="val reveal"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4-3 7-7 9-4-2-7-5-7-9V6l7-3z"/></svg></div><h3>La durabilité</h3><p>Matériaux choisis pour résister au temps. Garantie 5 ans, SAV humain.</p></div>
+      <div class="val reveal"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18"/></svg></div><h3>La fabrication locale</h3><p>Produites en Europe, dans des ateliers que nous connaissons et contrôlons.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="process">
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat reveal"><b>12 000+</b><span>moustiquaires fabriquées</span></div>
+      <div class="stat reveal"><b>4,9/5</b><span>satisfaction client</span></div>
+      <div class="stat reveal"><b>5 ans</b><span>de garantie</span></div>
+      <div class="stat reveal"><b>100 %</b><span>fabrication UE</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head center reveal"><span class="eyebrow">L'équipe</span><h2>Des artisans, pas une chaîne anonyme</h2></div>
+    <div class="team">
+      <div class="member reveal"><div class="av ph"><img data-kw="portrait,man,professional" data-w="500" data-h="500" data-lock="71" alt=""></div><b>Julien</b><span>Fondateur & mesures</span></div>
+      <div class="member reveal"><div class="av ph"><img data-kw="portrait,woman,professional" data-w="500" data-h="500" data-lock="72" alt=""></div><b>Marie</b><span>Atelier & qualité</span></div>
+      <div class="member reveal"><div class="av ph"><img data-kw="portrait,man,smile" data-w="500" data-h="500" data-lock="73" alt=""></div><b>Karim</b><span>Service client</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="ctaband">
+  <div class="wrap box"><div class="reveal"><h2>Envie d'une moustiquaire à votre image&nbsp;?</h2><p>Configurez la vôtre en moins de deux minutes.</p></div>
+  <div class="hero-actions"><a href="configurateur.html" class="btn btn-primary">Configurer ma moustiquaire</a><a href="contact.html" class="btn btn-outline">Nous contacter</a></div></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>
