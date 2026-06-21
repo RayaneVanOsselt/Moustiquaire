@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /panier.html
+Disallow: /commande.html
+
+Sitemap: https://RayaneVanOsselt.github.io/Moustiquaire/sitemap.xml
+
+# Crawl-delay pour respecter les ressources serveur
+Crawl-delay: 1
