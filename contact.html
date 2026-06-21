@@ -74,7 +74,7 @@
           <span class="msg">Sélectionnez un sujet</span>
         </div>
         <div class="fg"><label for="message">Message *</label><textarea id="message" placeholder="Décrivez votre projet, vos dimensions, vos questions…"></textarea><span class="msg">Message trop court (10 caractères min.)</span></div>
-        <button class="btn btn-primary btn-block" id="send">Envoyer le message</button>
+        <button class="btn btn-primary btn-block" id="send" type="button">Envoyer le message</button>
       </div>
 
       <div>
@@ -113,7 +113,7 @@
 <script src="app.js"></script>
 <script>
 function fail(id,cond){const fg=document.getElementById(id).closest('.fg');fg.classList.toggle('err',cond);return cond;}
-document.getElementById('send').addEventListener('click',()=>{
+document.getElementById('send').addEventListener('click',async()=>{
   const v=id=>document.getElementById(id).value.trim();
   let bad=false;
   bad=fail('nom',!v('nom'))||bad;
@@ -123,12 +123,43 @@ document.getElementById('send').addEventListener('click',()=>{
   bad=fail('sujet',!v('sujet'))||bad;
   bad=fail('message',v('message').length<10)||bad;
   if(bad){toast('Merci de corriger les champs en rouge');return;}
-  document.getElementById('ok').classList.add('show');
-  document.getElementById('ok').scrollIntoView({behavior:'smooth',block:'center'});
-  ['nom','prenom','email','tel','sujet','message'].forEach(id=>document.getElementById(id).value='');
-  toast('Message envoyé');
+
+  const formData=new FormData();
+  formData.append('nom',v('nom'));
+  formData.append('prenom',v('prenom'));
+  formData.append('email',v('email'));
+  formData.append('telephone',v('tel'));
+  formData.append('sujet',v('sujet'));
+  formData.append('message',v('message'));
+
+  try{
+    document.getElementById('send').disabled=true;
+    document.getElementById('send').textContent='Envoi en cours…';
+
+    const response=await fetch('https://formspree.io/f/xykqgqyj',{
+      method:'POST',
+      body:formData,
+      headers:{'Accept':'application/json'}
+    });
+
+    if(response.ok){
+      document.getElementById('ok').classList.add('show');
+      document.getElementById('ok').scrollIntoView({behavior:'smooth',block:'center'});
+      ['nom','prenom','email','tel','sujet','message'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('send').disabled=false;
+      document.getElementById('send').textContent='Envoyer le message';
+    }else{
+      toast('Erreur lors de l\'envoi. Réessayez.');
+      document.getElementById('send').disabled=false;
+      document.getElementById('send').textContent='Envoyer le message';
+    }
+  }catch(err){
+    toast('Erreur de connexion. Vérifiez votre connexion internet.');
+    console.error(err);
+    document.getElementById('send').disabled=false;
+    document.getElementById('send').textContent='Envoyer le message';
+  }
 });
-// efface l'erreur en cours de saisie
 document.querySelectorAll('.fg input,.fg select,.fg textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.fg').classList.remove('err')));
 </script>
 </body>
