@@ -16,6 +16,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="chatbot.css" />
 <style>
   .config-grid{display:grid;grid-template-columns:1fr .92fr;gap:36px;align-items:start;margin-top:-40px;position:relative;z-index:5}
   .panel{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:32px;box-shadow:var(--ombre)}
@@ -247,5 +248,6 @@ $('#addBtn').addEventListener('click',()=>{
   toast('Moustiquaire ajoutée au panier · '+fmt(price)+' €');
 });
 </script>
+<script src="chatbot.js"></script>
 </body>
 </html>
