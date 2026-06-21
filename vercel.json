@@ -1,9 +1,0 @@
-{
-  "buildCommand": "npm install",
-  "outputDirectory": "public",
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
-}

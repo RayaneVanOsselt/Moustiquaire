@@ -168,35 +168,31 @@ document.getElementById('orderForm').addEventListener('submit',async e=>{
 
   if(bad){toast('Merci de corriger les champs');return;}
 
-  // Build comprehensive email data
   const items=Cart.read();
   const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
 
-  const payload={
-    nom:v('nom'),
-    prenom:v('prenom'),
-    email:v('email'),
-    telephone:v('tel'),
-    adresse:v('addr'),
-    code_postal:v('cp'),
-    ville:v('ville'),
-    pays:v('pays'),
-    notes:v('notes'),
-    panier:items.map(i=>`${i.name} (x${i.qty||1}) = ${i.price*(i.qty||1)} €`).join(' | '),
-    total_ttc:total+' €'
-  };
+  const formData=new FormData();
+  formData.append('nom',v('nom'));
+  formData.append('prenom',v('prenom'));
+  formData.append('email',v('email'));
+  formData.append('telephone',v('tel'));
+  formData.append('adresse',v('addr'));
+  formData.append('code_postal',v('cp'));
+  formData.append('ville',v('ville'));
+  formData.append('pays',v('pays'));
+  formData.append('notes',v('notes'));
+  formData.append('panier',items.map(i=>`${i.name} (x${i.qty||1}) = ${i.price*(i.qty||1)} €`).join(' | '));
+  formData.append('total_ttc',total+' €');
 
   try{
     document.getElementById('submitBtn').disabled=true;
     document.getElementById('submitBtn').textContent='Envoi en cours…';
 
-    const response=await fetch('/api/send-order',{
+    const response=await fetch('https://formspree.io/f/xyzgbyby',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
+      body:formData,
+      headers:{'Accept':'application/json'}
     });
-
-    const result=await response.json();
 
     if(response.ok){
       document.getElementById('success').classList.add('show');
