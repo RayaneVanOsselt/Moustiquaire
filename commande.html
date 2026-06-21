@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Passer la commande — AÉRIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .order-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:start}
+  .order-form{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:36px}
+  .frow{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+  .fg{position:relative}
+  .fg label{font-family:var(--data);font-weight:600;font-size:13px;color:#4a4c45;display:block;margin-bottom:8px;letter-spacing:.02em}
+  .fg input,.fg select,.fg textarea{width:100%;padding:13px 15px;border:1px solid var(--ligne);border-radius:12px;font-family:var(--body);font-size:15px;outline:none;background:var(--blanc-casse);transition:.25s}
+  .fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--sauge);background:#fff;box-shadow:0 0 0 3px rgba(92,129,102,.08)}
+  .fg textarea{resize:vertical;min-height:100px}
+  .fg.err input,.fg.err select,.fg.err textarea{border-color:#d97770;background:#fef5f3}
+  .fg .msg{color:#d97770;font-size:12.5px;margin-top:5px;display:none;font-weight:600}
+  .fg.err .msg{display:block}
+  .order-summary{background:var(--sable-clair);border:1px solid var(--ligne);border-radius:var(--r-l);padding:32px;position:sticky;top:90px}
+  .sum-title{font-family:var(--data);font-weight:700;font-size:18px;margin-bottom:20px}
+  .item-line{display:flex;justify-content:space-between;padding:12px 0;font-size:14.5px;border-bottom:1px solid var(--ligne-2)}
+  .item-line .name{flex:1}
+  .item-line .price{font-family:var(--data);font-weight:700;text-align:right}
+  .total-line{display:flex;justify-content:space-between;padding:18px 0;border-top:1.5px solid var(--ligne);font-family:var(--data);font-weight:700;font-size:18px}
+  .submit-btn{display:flex;gap:12px;margin-top:24px}
+  .submit-btn button{flex:1}
+  .success{background:rgba(92,129,102,.1);border:1px solid var(--sauge);color:var(--sauge-fonce);border-radius:14px;padding:16px;font-family:var(--data);font-weight:600;font-size:14px;display:none;align-items:center;gap:10px;margin-bottom:24px}
+  .success.show{display:flex}
+  .success::before{content:"✓";font-weight:800;font-size:18px}
+  @media(max-width:980px){.order-grid{grid-template-columns:1fr}.order-summary{position:static}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    <a href="produits.html">Produits</a>
+    <a href="configurateur.html">Configurateur</a>
+    <a href="savoir-faire.html">Savoir-faire</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> <a href="panier.html">Panier</a> <span>›</span> Commande</div>
+    <h1>Finalisez votre commande</h1>
+    <p>Entrez vos coordonnées. Un devis détaillé vous sera envoyé par e-mail pour confirmation.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="order-grid">
+      <div class="order-form">
+        <div class="success" id="success">Votre commande a bien été envoyée. Nous vous contacterons rapidement.</div>
+        
+        <form id="orderForm">
+          <h3 style="margin-bottom:24px;font-size:18px">Vos informations</h3>
+          <div class="frow">
+            <div class="fg"><label for="nom">Nom complet *</label><input id="nom" name="nom" type="text" required autocomplete="family-name"><span class="msg">Requis</span></div>
+            <div class="fg"><label for="prenom">Prénom *</label><input id="prenom" name="prenom" type="text" required autocomplete="given-name"><span class="msg">Requis</span></div>
+          </div>
+          
+          <div class="frow">
+            <div class="fg"><label for="email">E-mail *</label><input id="email" name="email" type="email" required autocomplete="email"><span class="msg">E-mail invalide</span></div>
+            <div class="fg"><label for="tel">Téléphone *</label><input id="tel" name="tel" type="tel" required autocomplete="tel"><span class="msg">Requis</span></div>
+          </div>
+          
+          <h3 style="margin:28px 0 18px;font-size:18px">Adresse de livraison</h3>
+          <div class="fg"><label for="addr">Rue & numéro *</label><input id="addr" name="adresse" type="text" required autocomplete="street-address"><span class="msg">Requis</span></div>
+          
+          <div class="frow">
+            <div class="fg"><label for="cp">Code postal *</label><input id="cp" name="code_postal" type="text" required><span class="msg">Requis</span></div>
+            <div class="fg"><label for="ville">Ville *</label><input id="ville" name="ville" type="text" required autocomplete="address-level2"><span class="msg">Requis</span></div>
+          </div>
+          
+          <div class="fg"><label for="pays">Pays *</label><select id="pays" name="pays" required><option value="">Choisir…</option><option>Belgique</option><option>France</option><option>Pays-Bas</option><option>Allemagne</option><option>Autre</option></select><span class="msg">Requis</span></div>
+          
+          <div class="fg"><label for="notes">Demandes spéciales</label><textarea id="notes" name="notes" placeholder="Coloris RAL, pose particulière, etc."></textarea></div>
+          
+          <div class="submit-btn">
+            <button type="submit" class="btn btn-gold btn-block" id="submitBtn">Envoyer la commande →</button>
+            <button type="button" class="btn btn-outline btn-block" onclick="location.href='panier.html'">Revenir</button>
+          </div>
+        </form>
+      </div>
+      
+      <div class="order-summary">
+        <div class="sum-title">Résumé de votre commande</div>
+        <div id="itemsList"></div>
+        <div class="total-line"><span>Total TTC</span><span id="totalPrice">—</span></div>
+        <p style="font-size:12px;color:var(--gris);margin-top:16px">Livraison estimée sous 10–21 jours. Prix finaux après confirmation de la fabrication.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const fmt=n=>n.toLocaleString('fr-BE');
+
+function renderSummary(){
+  const items=Cart.read();
+  const html=items.map(i=>`<div class="item-line"><span class="name">${i.name}</span><span class="price">${fmt(i.price*(i.qty||1))} €</span></div>`).join('');
+  const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+  document.getElementById('itemsList').innerHTML=html;
+  document.getElementById('totalPrice').textContent=fmt(total)+' €';
+  
+  // store cart in form as hidden field
+  document.getElementById('orderForm').innerHTML+=`<input type="hidden" name="panier" value="${items.map(i=>'['+i.name+'] x'+(i.qty||1)+' = '+fmt(i.price*(i.qty||1))+' €').join(' | ')}">`;
+}
+renderSummary();
+
+// Form validation
+function fail(id,cond){const fg=document.getElementById(id).closest('.fg');fg.classList.toggle('err',cond);return cond;}
+
+document.getElementById('orderForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  let bad=false;
+  const v=id=>document.getElementById(id).value.trim();
+  
+  bad=fail('nom',!v('nom'))||bad;
+  bad=fail('prenom',!v('prenom'))||bad;
+  bad=fail('email',!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v('email')))||bad;
+  bad=fail('tel',!v('tel'))||bad;
+  bad=fail('addr',!v('addr'))||bad;
+  bad=fail('cp',!v('cp'))||bad;
+  bad=fail('ville',!v('ville'))||bad;
+  bad=fail('pays',!v('pays'))||bad;
+  
+  if(bad){toast('Merci de corriger les champs');return;}
+  
+  // Build comprehensive email data
+  const items=Cart.read();
+  const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+  
+  const formData=new FormData();
+  formData.append('nom',v('nom'));
+  formData.append('prenom',v('prenom'));
+  formData.append('email',v('email'));
+  formData.append('telephone',v('tel'));
+  formData.append('adresse',v('addr'));
+  formData.append('code_postal',v('cp'));
+  formData.append('ville',v('ville'));
+  formData.append('pays',v('pays'));
+  formData.append('notes',v('notes'));
+  formData.append('panier',items.map(i=>`${i.name} (x${i.qty||1}) = ${i.price*(i.qty||1)} €`).join(' | '));
+  formData.append('total_ttc',total+' €');
+  formData.append('type','Nouvelle commande AÉRIS');
+  
+  try{
+    const response=await fetch('https://formsubmit.co/vanosselt.rayane@gmail.com',{
+      method:'POST',
+      body:formData
+    });
+    
+    if(response.ok){
+      document.getElementById('success').classList.add('show');
+      document.getElementById('orderForm').reset();
+      Cart.clear();
+      Cart.refresh();
+      setTimeout(()=>location.href='index.html',3000);
+    }else{
+      toast('Erreur lors de l\'envoi. Réessayez.');
+    }
+  }catch(err){
+    toast('Erreur de connexion. Vérifiez votre connexion internet.');
+    console.error(err);
+  }
+});
+
+// Clear errors on input
+document.querySelectorAll('.fg input,.fg select,.fg textarea').forEach(el=>el.addEventListener('input',()=>el.closest('.fg').classList.remove('err')));
+</script>
+</body>
+</html>

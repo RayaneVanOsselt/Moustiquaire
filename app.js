@@ -58,6 +58,10 @@ const Cart = {
   write(items){ this._mem=items; try{ localStorage.setItem(this.key, JSON.stringify(items)) }catch(e){} this.refresh(); },
   add(item){ const items=this.read(); items.push(item); this.write(items); },
   count(){ return this.read().reduce((n,i)=>n+(i.qty||1),0); },
+  increment(idx){ const items=this.read(); if(items[idx]) items[idx].qty=(items[idx].qty||1)+1; this.write(items); },
+  decrement(idx){ const items=this.read(); if(items[idx]&&items[idx].qty>1) items[idx].qty--; else items.splice(idx,1); this.write(items); },
+  remove(idx){ const items=this.read(); items.splice(idx,1); this.write(items); },
+  clear(){ this._mem=[]; try{ localStorage.removeItem(this.key) }catch(e){} this.refresh(); },
   refresh(){
     const c = document.querySelector('.cart-count');
     if(!c) return;

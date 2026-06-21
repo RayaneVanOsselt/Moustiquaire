@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Panier — AÉRIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  .cart-layout{display:grid;grid-template-columns:1.2fr .8fr;gap:36px;align-items:start}
+  .cart-items{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:32px}
+  .empty{text-align:center;padding:60px 30px;color:var(--gris)}
+  .empty svg{width:64px;height:64px;stroke:var(--ligne-2);fill:none;stroke-width:1.2;margin-bottom:20px;opacity:.5}
+  .empty h2{font-size:24px;color:var(--anthracite);margin-bottom:10px}
+  .cart-item{display:grid;grid-template-columns:100px 1fr 80px;gap:20px;align-items:center;padding:20px 0;border-bottom:1px solid var(--ligne-2)}
+  .cart-item:first-child{padding-top:0}
+  .cart-item:last-child{border-bottom:none;padding-bottom:0}
+  .cart-thumb{aspect-ratio:1;background:var(--sable-clair);border-radius:12px;overflow:hidden;font-size:12px;color:var(--gris);display:flex;align-items:center;justify-content:center}
+  .cart-info h3{font-size:15px;margin-bottom:6px}
+  .cart-info p{font-size:13px;color:var(--gris);margin-bottom:10px}
+  .cart-qty{display:flex;align-items:center;gap:8px;border:1px solid var(--ligne);border-radius:8px;width:fit-content}
+  .cart-qty button{width:32px;height:32px;border:none;background:none;cursor:pointer;font-family:var(--data);font-weight:700;color:var(--gris);transition:.2s}
+  .cart-qty button:hover{color:var(--sauge)}
+  .cart-price{text-align:right;font-family:var(--data);font-weight:700;font-size:16px}
+  .cart-remove{text-align:right}
+  .cart-remove button{background:none;border:none;color:var(--gris-clair);cursor:pointer;padding:8px;transition:.2s;font-size:18px}
+  .cart-remove button:hover{color:#c0563f}
+  .cart-sum{background:var(--sable-clair);border:1px solid var(--ligne);border-radius:var(--r-l);padding:28px;position:sticky;top:90px}
+  .sum-row{display:flex;justify-content:space-between;padding:12px 0;font-size:15px;border-bottom:1px solid var(--ligne)}
+  .sum-row.total{border:none;padding-top:16px;font-family:var(--data);font-weight:700;font-size:20px;color:var(--anthracite)}
+  .sum-row.total span:first-child{color:var(--gris)}
+  .sum-actions{display:flex;flex-direction:column;gap:12px;margin-top:24px}
+  @media(max-width:980px){.cart-layout{grid-template-columns:1fr}.cart-sum{position:static}}
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    <a href="produits.html">Produits</a>
+    <a href="configurateur.html">Configurateur</a>
+    <a href="savoir-faire.html">Savoir-faire</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> Panier</div>
+    <h1>Votre panier</h1>
+    <p>Vérifiez votre sélection avant de passer commande. Les prix sont estimés selon vos dimensions.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="cart-layout">
+      <div class="cart-items" id="items"></div>
+      <div class="cart-sum">
+        <div class="sum-row"><span>Sous-total</span><span id="st">— €</span></div>
+        <div class="sum-row"><span>TVA 21 %</span><span id="vat">— €</span></div>
+        <div class="sum-row"><span>Livraison estimée</span><span id="ship">Gratuite</span></div>
+        <div class="sum-row total"><span>Total TTC</span><span id="tot">— €</span></div>
+        <div class="sum-actions">
+          <a href="commande.html" class="btn btn-gold btn-block" id="checkout">Passer la commande →</a>
+          <a href="configurateur.html" class="btn btn-outline btn-block">Configurer une autre</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé SSL · Maquette de démonstration</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+const fmt=n=>n.toLocaleString('fr-BE');
+function render(){
+  const items=Cart.read();
+  const $items=document.getElementById('items');
+  const $st=document.getElementById('st'),$vat=document.getElementById('vat'),$ship=document.getElementById('ship'),$tot=document.getElementById('tot');
+  
+  if(items.length===0){
+    $items.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z M9 20a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M18 20a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/></svg><h2>Panier vide</h2><p>Découvrez nos produits et configurez votre moustiquaire.</p><a href="configurateur.html" class="btn btn-primary" style="margin-top:20px">Commencer</a></div>';
+    $st.textContent='0 €';$vat.textContent='0 €';$tot.textContent='0 €';
+    document.getElementById('checkout').style.opacity='.5';
+    return;
+  }
+  
+  const st=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+  const tv=st-st/1.21;
+  $items.innerHTML=items.map((item,idx)=>`
+    <div class="cart-item">
+      <div class="cart-thumb">Moustiquaire</div>
+      <div class="cart-info">
+        <h3>${item.name}</h3>
+        <p><strong>${fmt(item.price)} €</strong> · sur mesure</p>
+        <div class="cart-qty">
+          <button onclick="Cart.decrement(${idx})">−</button>
+          <span>${item.qty||1}</span>
+          <button onclick="Cart.increment(${idx})">+</button>
+        </div>
+      </div>
+      <div class="cart-price">${fmt(item.price*(item.qty||1))} €</div>
+      <div class="cart-remove"><button onclick="Cart.remove(${idx})">✕</button></div>
+    </div>
+  `).join('');
+  
+  $st.textContent=fmt(st)+' €';
+  $vat.textContent=fmt(Math.round(tv))+' €';
+  $tot.textContent=fmt(st)+' €';
+}
+
+// étendre Cart
+Cart.increment=function(idx){const items=this.read();if(items[idx])items[idx].qty=(items[idx].qty||1)+1;this.write(items)};
+Cart.decrement=function(idx){const items=this.read();if(items[idx]&&items[idx].qty>1)items[idx].qty--;else items.splice(idx,1);this.write(items)};
+Cart.remove=function(idx){const items=this.read();items.splice(idx,1);this.write(items)};
+
+render();
+// listener pour mise à jour
+window.addEventListener('storage',render);
+</script>
+</body>
+</html>
