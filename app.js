@@ -3,16 +3,51 @@
    =========================================================== */
 
 /* ---------- Photos réelles + repli élégant ----------
-   Chaque <img data-kw="window,interior" data-lock="3"> charge une vraie
-   photo via picsum.photos (CDN stable, contrairement à loremflickr qui
-   dépend d'une API Flickr peu fiable). En cas d'échec (hors-ligne), le
-   conteneur .ph bascule sur un dégradé de marque : jamais d'image cassée. */
+   Chaque <img data-kw="..."> charge une vraie photo choisie à la main
+   (et non une photo aléatoire sans rapport, comme le faisaient
+   loremflickr et picsum.photos) afin que tout le site reste cohérent :
+   les photos "fenêtre" montrent vraiment des fenêtres, les portraits
+   viennent tous de la même série pour un style homogène. En cas d'échec
+   (hors-ligne), le conteneur .ph bascule sur un dégradé de marque. */
+const PHOTO_MAP = {
+  'window,sunlight,interior,plants': 'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
+  'modern,living,room,window':       'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
+  'window,frame,house':              'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
+  'window,glass,modern':             'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
+  'large,window,villa':              'https://images.unsplash.com/photo-1757359056339-22968344cce6',
+  'patio,door,glass':                'https://images.unsplash.com/photo-1757359056339-22968344cce6',
+  'sliding,door,terrace':            'https://images.unsplash.com/photo-1757359056339-22968344cce6',
+  'door,house,entrance':             'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
+  'door,wood,house':                 'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
+  'curtain,door,home':               'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
+  'craftsman,workshop,aluminium,frame': 'https://images.unsplash.com/photo-1685320198649-781e83a61de4',
+  'aluminium,workshop,manufacturing':   'https://images.unsplash.com/photo-1685320198649-781e83a61de4',
+  'portrait,woman':              'https://randomuser.me/api/portraits/women/65.jpg',
+  'portrait,man':                'https://randomuser.me/api/portraits/men/32.jpg',
+  'portrait,woman,smile':        'https://randomuser.me/api/portraits/women/44.jpg',
+  'portrait,man,professional':   'https://randomuser.me/api/portraits/men/75.jpg',
+  'portrait,woman,professional': 'https://randomuser.me/api/portraits/women/23.jpg',
+  'portrait,man,smile':          'https://randomuser.me/api/portraits/men/51.jpg',
+};
+
+function photoSrc(kw, w, h){
+  const base = PHOTO_MAP[kw];
+  if (!base) return null;
+  if (base.includes('images.unsplash.com')) return `${base}?auto=format&fit=crop&w=${w}&h=${h}&q=80`;
+  return base; // randomuser.me : taille fixe, pas de redimensionnement
+}
+
 function mountPhotos(){
   document.querySelectorAll('img[data-kw]').forEach(img=>{
     const w = img.dataset.w || 1200, h = img.dataset.h || 900;
-    const lock = img.dataset.lock || Math.floor(Math.random()*999);
-    const seed = (img.dataset.kw || 'aeris') + '-' + lock;
-    const src = `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
+    const src = photoSrc(img.dataset.kw, w, h);
+
+    if (!src) {
+      const box = img.closest('.ph');
+      img.remove();
+      if (box) box.classList.add('is-fallback');
+      return;
+    }
 
     // Timeout pour afficher fallback si image prend trop longtemps
     const timeoutId = setTimeout(() => {
@@ -32,6 +67,7 @@ function mountPhotos(){
       if(box) box.classList.add('is-fallback');
     }, {once:true});
 
+    img.classList.add('ph-real');
     img.src = src;
     img.loading = img.dataset.eager ? 'eager' : 'lazy';
   });
