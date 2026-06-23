@@ -118,56 +118,55 @@ const Auth = {
     const navCta = document.querySelector('.nav-cta');
     if (!navCta) return;
 
+    // Supprimer l'ancien profil s'il existe
+    const oldProfile = navCta.querySelector('.user-profile');
+    if (oldProfile) oldProfile.remove();
+    const oldLogin = navCta.querySelector('a[href="login.html"]');
+    if (oldLogin) oldLogin.parentElement.remove();
+
     if (this.user) {
       // Utilisateur connecté
-      const userBtn = navCta.querySelector('.user-profile');
-      if (userBtn) userBtn.remove();
-
-      const html = `
-        <div class="user-profile">
-          <button class="user-btn" id="user-menu-btn">👤 ${this.user.prenom}</button>
-          <div class="user-menu" id="user-menu" style="display:none">
-            <a href="profile.html">Mon Profil</a>
-            <a href="orders.html">Mes Commandes</a>
-            <a href="account.html">Mon Compte</a>
-            <button id="logout-btn" style="width:100%;text-align:left;padding:10px;border:none;background:none;cursor:pointer;color:#d97770">Déconnexion</button>
-          </div>
+      const userDiv = document.createElement('div');
+      userDiv.className = 'user-profile';
+      userDiv.innerHTML = `
+        <button class="user-btn" id="user-menu-btn">👤 ${this.user.prenom}</button>
+        <div class="user-menu" id="user-menu" style="display:none;position:absolute;top:100%;right:0;background:white;border:1px solid var(--ligne);border-radius:12px;min-width:180px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:1000;margin-top:8px">
+          <a href="profile.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mon Profil</a>
+          <a href="orders.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mes Commandes</a>
+          <a href="account.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mon Compte</a>
+          <button id="logout-btn" style="width:100%;text-align:left;padding:12px 16px;border:none;background:none;cursor:pointer;color:#d97770;font-family:inherit;font-size:14px">Déconnexion</button>
         </div>
       `;
 
-      const userDiv = document.createElement('div');
-      userDiv.className = 'user-profile';
-      userDiv.innerHTML = html;
       navCta.insertBefore(userDiv, navCta.firstChild);
 
-      // Events
-      const userBtn = document.getElementById('user-menu-btn');
-      const userMenu = document.getElementById('user-menu');
-      const logoutBtn = document.getElementById('logout-btn');
+      setTimeout(() => {
+        const userBtn = document.getElementById('user-menu-btn');
+        const userMenu = document.getElementById('user-menu');
+        const logoutBtn = document.getElementById('logout-btn');
 
-      userBtn.addEventListener('click', () => {
-        userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
-      });
+        if (userBtn && userMenu) {
+          userBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
+          });
 
-      logoutBtn.addEventListener('click', () => this.logout());
+          if (logoutBtn) {
+            logoutBtn.addEventListener('click', () => this.logout());
+          }
 
-      // Fermer menu si click ailleurs
-      document.addEventListener('click', (e) => {
-        if (!e.target.closest('.user-profile')) {
-          userMenu.style.display = 'none';
+          document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-profile')) {
+              userMenu.style.display = 'none';
+            }
+          });
         }
-      });
+      }, 10);
     } else {
       // Utilisateur pas connecté
-      const userBtn = navCta.querySelector('.user-profile');
-      if (userBtn) userBtn.remove();
-
-      const html = `
-        <a href="login.html" class="btn btn-outline btn-sm">Connexion</a>
-      `;
-      const loginBtn = document.createElement('div');
-      loginBtn.innerHTML = html;
-      navCta.insertBefore(loginBtn.firstChild, navCta.firstChild);
+      const loginDiv = document.createElement('div');
+      loginDiv.innerHTML = '<a href="login.html" class="btn btn-outline btn-sm">Connexion</a>';
+      navCta.insertBefore(loginDiv.firstChild, navCta.firstChild);
     }
   }
 };

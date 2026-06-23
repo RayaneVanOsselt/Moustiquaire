@@ -10,13 +10,28 @@ function mountPhotos(){
   document.querySelectorAll('img[data-kw]').forEach(img=>{
     const w = img.dataset.w || 1200, h = img.dataset.h || 900;
     const lock = img.dataset.lock || Math.floor(Math.random()*999);
-    img.src = `https://loremflickr.com/${w}/${h}/${img.dataset.kw}?lock=${lock}`;
-    img.loading = img.dataset.eager ? 'eager' : 'lazy';
-    img.addEventListener('error', ()=>{
+    const src = `https://loremflickr.com/${w}/${h}/${img.dataset.kw}?lock=${lock}`;
+
+    // Timeout pour afficher fallback si image prend trop longtemps
+    const timeoutId = setTimeout(() => {
+      if (!img.complete || img.naturalHeight === 0) {
+        const box = img.closest('.ph');
+        if (box && !box.classList.contains('is-fallback')) {
+          box.classList.add('is-fallback');
+        }
+      }
+    }, 3000);
+
+    img.addEventListener('load', () => clearTimeout(timeoutId));
+    img.addEventListener('error', () => {
+      clearTimeout(timeoutId);
       const box = img.closest('.ph');
       img.remove();
       if(box) box.classList.add('is-fallback');
     }, {once:true});
+
+    img.src = src;
+    img.loading = img.dataset.eager ? 'eager' : 'lazy';
   });
 }
 
