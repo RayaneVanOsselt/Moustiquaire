@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Connexion — AÉRIS</title>
+<meta name="description" content="Connectez-vous à votre compte AÉRIS pour accéder à vos commandes et votre profil." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    <a href="produits.html">Produits</a>
+    <a href="configurateur.html">Configurateur</a>
+    <a href="savoir-faire.html">Savoir-faire</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="auth-container">
+  <h1 class="auth-title">Connexion</h1>
+  <p class="auth-subtitle">Connectez-vous à votre compte AÉRIS</p>
+
+  <form class="auth-form" id="loginForm">
+    <div class="form-group">
+      <label for="email">E-mail *</label>
+      <input type="email" id="email" name="email" required>
+      <span class="error-msg">E-mail invalide</span>
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe *</label>
+      <input type="password" id="password" name="password" required>
+      <span class="error-msg">Mot de passe incorrect</span>
+    </div>
+
+    <button type="submit" class="auth-btn">Se connecter</button>
+  </form>
+
+  <p class="auth-divider">Vous n'avez pas de compte ?</p>
+  <p class="auth-link"><a href="register.html">Créer un compte AÉRIS</a></p>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+
+  try {
+    await Auth.login(email, password);
+    toast('Connexion réussie !');
+    setTimeout(() => location.href = 'profile.html', 1000);
+  } catch (err) {
+    document.getElementById('email').classList.add('error');
+    document.getElementById('password').classList.add('error');
+    toast('Email ou mot de passe incorrect');
+  }
+});
+
+document.querySelectorAll('#loginForm input').forEach(input => {
+  input.addEventListener('input', () => input.classList.remove('error'));
+});
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
 <style>
   .order-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:40px;align-items:start}
   .order-form{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:36px}
@@ -136,7 +137,31 @@
 </footer>
 
 <script src="app.js"></script>
+<script src="auth.js"></script>
 <script src="chatbot.js"></script>
+<script>
+// Vérifier connexion
+document.addEventListener('DOMContentLoaded', () => {
+  if (!Auth.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+
+  // Pré-remplir avec les infos du compte
+  const user = Auth.getUser();
+  document.getElementById('nom').value = user.nom;
+  document.getElementById('prenom').value = user.prenom;
+  document.getElementById('email').value = user.email;
+
+  // Si adresse enregistrée, utiliser la première
+  if (user.addresses && user.addresses.length > 0) {
+    const addr = user.addresses[0];
+    document.getElementById('addr').value = addr.adresse || '';
+    document.getElementById('cp').value = addr.cp || '';
+    document.getElementById('ville').value = addr.ville || '';
+  }
+});
+</script>
 <script>
 const fmt=n=>n.toLocaleString('fr-BE');
 
@@ -198,11 +223,21 @@ document.getElementById('orderForm').addEventListener('submit',async e=>{
     });
 
     if(response.ok){
+      // Sauvegarder la commande dans le profil
+      const items=Cart.read();
+      const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+      Auth.saveOrder({
+        items: items.map(i=>`${i.name} (x${i.qty||1})`).join(', '),
+        total: total,
+        adresse: v('addr'),
+        ville: v('ville')
+      });
+
       document.getElementById('success').classList.add('show');
       document.getElementById('orderForm').reset();
       Cart.clear();
       Cart.refresh();
-      setTimeout(()=>location.href='index.html',3000);
+      setTimeout(()=>location.href='orders.html',3000);
     }else{
       toast('Erreur lors de l\'envoi. Réessayez.');
       document.getElementById('submitBtn').disabled=false;

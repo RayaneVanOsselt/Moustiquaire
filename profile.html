@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon Profil — AÉRIS</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
+<style>
+  .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .profile-section { display: flex; flex-direction: column; gap: 24px; }
+  .section-title { font-family: var(--data); font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+  .address-list { display: flex; flex-direction: column; gap: 12px; }
+  .address-item { background: var(--blanc-casse); padding: 16px; border-radius: 12px; border: 1px solid var(--ligne); }
+  .btn-add { background: var(--sauge); color: white; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer; font-weight: 600; }
+  @media(max-width:980px) { .profile-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="wrap" style="margin:60px 0">
+  <h1 style="font-size:32px;margin-bottom:40px">Mon Profil</h1>
+
+  <div class="profile-grid">
+    <div class="profile-section">
+      <div class="profile-card">
+        <div class="profile-header">
+          <h2 class="profile-title">Informations personnelles</h2>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div>
+            <small style="color:var(--gris)">Prénom</small>
+            <p id="userPrenom" style="font-weight:600">—</p>
+          </div>
+          <div>
+            <small style="color:var(--gris)">Nom</small>
+            <p id="userNom" style="font-weight:600">—</p>
+          </div>
+          <div>
+            <small style="color:var(--gris)">Email</small>
+            <p id="userEmail" style="font-weight:600">—</p>
+          </div>
+          <button class="btn btn-outline" onclick="location.href='account.html'">Modifier</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-card">
+        <div class="profile-header">
+          <h2 class="profile-title">Adresses de livraison</h2>
+        </div>
+        <div id="addressList" class="address-list"></div>
+        <button class="btn-add" onclick="addAddress()">+ Ajouter une adresse</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:40px">
+    <div class="profile-card">
+      <div class="profile-header">
+        <h2 class="profile-title">Commandes récentes</h2>
+      </div>
+      <p><a href="orders.html" style="color:var(--sauge);text-decoration:none;font-weight:600">Voir toutes mes commandes →</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></div>
+      <div><h4>Compte</h4><a href="profile.html">Mon Profil</a><a href="orders.html">Mes Commandes</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (!Auth.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+
+  const user = Auth.getUser();
+  document.getElementById('userPrenom').textContent = user.prenom;
+  document.getElementById('userNom').textContent = user.nom;
+  document.getElementById('userEmail').textContent = user.email;
+
+  const addressList = document.getElementById('addressList');
+  if (user.addresses && user.addresses.length > 0) {
+    addressList.innerHTML = user.addresses.map(a => `
+      <div class="address-item">
+        <p style="font-weight:600">${a.nom || ''}</p>
+        <p style="font-size:14px;color:var(--gris)">${a.adresse || ''}<br>${a.cp || ''} ${a.ville || ''}</p>
+      </div>
+    `).join('');
+  } else {
+    addressList.innerHTML = '<p style="color:var(--gris);font-size:14px">Aucune adresse enregistrée</p>';
+  }
+});
+
+function addAddress() {
+  const adresse = prompt('Adresse :');
+  const cp = prompt('Code postal :');
+  const ville = prompt('Ville :');
+
+  if (adresse && cp && ville) {
+    Auth.addAddress({ adresse, cp, ville, nom: 'Adresse' });
+    location.reload();
+  }
+}
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mon Compte — AÉRIS</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="wrap" style="margin:60px 0">
+  <h1 style="font-size:32px;margin-bottom:40px">Gérer mon Compte</h1>
+
+  <div style="max-width:600px">
+    <div class="profile-card">
+      <h2 class="profile-title" style="margin-bottom:24px">Modifier mes informations</h2>
+      <form id="updateForm" style="display:flex;flex-direction:column;gap:20px">
+        <div class="form-group">
+          <label for="prenom">Prénom</label>
+          <input type="text" id="prenom" required>
+        </div>
+        <div class="form-group">
+          <label for="nom">Nom</label>
+          <input type="text" id="nom" required>
+        </div>
+        <button type="submit" class="auth-btn">Enregistrer les modifications</button>
+      </form>
+    </div>
+
+    <div class="profile-card" style="margin-top:24px;border:1px solid #d97770;background:#fef5f3">
+      <h2 class="profile-title" style="color:#d97770;margin-bottom:16px">Zone Dangereuse</h2>
+      <p style="font-size:14px;color:var(--gris);margin-bottom:16px">Ces actions sont irréversibles</p>
+      <button onclick="changePassword()" class="btn btn-outline" style="width:100%;margin-bottom:12px">Changer mon mot de passe</button>
+      <button onclick="deleteAccount()" class="btn" style="width:100%;background:#d97770;color:white;border:none;border-radius:8px;padding:10px;cursor:pointer">Supprimer mon compte</button>
+    </div>
+
+    <div style="margin-top:24px;text-align:center">
+      <a href="profile.html" style="color:var(--sauge);text-decoration:none;font-weight:600">← Retour au profil</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></div>
+      <div><h4>Compte</h4><a href="profile.html">Mon Profil</a><a href="orders.html">Mes Commandes</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  if (!Auth.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+
+  const user = Auth.getUser();
+  document.getElementById('prenom').value = user.prenom;
+  document.getElementById('nom').value = user.nom;
+
+  document.getElementById('updateForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    Auth.updateProfile({
+      prenom: document.getElementById('prenom').value,
+      nom: document.getElementById('nom').value
+    });
+    toast('Modifications enregistrées !');
+  });
+});
+
+function changePassword() {
+  const newPwd = prompt('Nouveau mot de passe :');
+  if (newPwd && newPwd.length >= 8) {
+    Auth.updateProfile({ password: btoa(newPwd) });
+    toast('Mot de passe mis à jour !');
+  } else {
+    toast('Mot de passe trop court (min. 8 caractères)');
+  }
+}
+
+function deleteAccount() {
+  if (confirm('Êtes-vous sûr ? Cette action est irréversible !')) {
+    if (confirm('Tapez votre email pour confirmer la suppression')) {
+      localStorage.removeItem('aeris_user_' + Auth.user.uid);
+      Auth.logout();
+    }
+  }
+}
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>

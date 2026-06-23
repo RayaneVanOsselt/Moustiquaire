@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mes Commandes — AÉRIS</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<section class="wrap" style="margin:60px 0">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:40px">
+    <h1 style="font-size:32px">Mes Commandes</h1>
+    <a href="profile.html" style="color:var(--sauge);text-decoration:none;font-weight:600">← Retour au profil</a>
+  </div>
+
+  <div id="ordersList" style="display:flex;flex-direction:column;gap:16px"></div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="contact.html">Contact</a></div>
+      <div><h4>Compte</h4><a href="profile.html">Mon Profil</a><a href="orders.html">Mes Commandes</a></div>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
+const fmt = n => n.toLocaleString('fr-BE');
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!Auth.isLoggedIn()) {
+    location.href = 'login.html';
+    return;
+  }
+
+  const user = Auth.getUser();
+  const ordersList = document.getElementById('ordersList');
+
+  if (user.orders && user.orders.length > 0) {
+    ordersList.innerHTML = user.orders.map(order => `
+      <div class="order-item">
+        <div class="order-info">
+          <div class="order-id">Commande ${order.id.substring(6)}</div>
+          <div class="order-date">${new Date(order.date).toLocaleDateString('fr-BE')}</div>
+          <div style="font-size:14px;color:var(--gris);margin-top:8px">
+            ${order.items || 'Produits'}
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-weight:700;font-size:18px;margin-bottom:8px">${fmt(order.total || 0)} €</div>
+          <div class="order-status">${order.status}</div>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    ordersList.innerHTML = '<div class="profile-card" style="text-align:center;padding:40px"><p style="color:var(--gris);margin-bottom:16px">Vous n\'avez pas encore de commandes</p><a href="configurateur.html" class="btn btn-primary">Commencer à configurer</a></div>';
+  }
+});
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>
