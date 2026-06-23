@@ -4,22 +4,23 @@
 
 /* ---------- Photos réelles + repli élégant ----------
    Chaque <img data-kw="..."> charge une vraie photo choisie à la main
-   (et non une photo aléatoire sans rapport, comme le faisaient
-   loremflickr et picsum.photos) afin que tout le site reste cohérent :
-   les photos "fenêtre" montrent vraiment des fenêtres, les portraits
-   viennent tous de la même série pour un style homogène. En cas d'échec
+   montrant de vraies moustiquaires (toile/grillage posé sur fenêtre ou
+   porte) plutôt que des fenêtres/portes nues, afin que les visuels
+   correspondent réellement aux produits vendus. En cas d'échec
    (hors-ligne), le conteneur .ph bascule sur un dégradé de marque. */
 const PHOTO_MAP = {
-  'window,sunlight,interior,plants': 'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
-  'modern,living,room,window':       'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
-  'window,frame,house':              'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
-  'window,glass,modern':             'https://images.unsplash.com/photo-1758565811176-ccd94357a844',
-  'large,window,villa':              'https://images.unsplash.com/photo-1757359056339-22968344cce6',
-  'patio,door,glass':                'https://images.unsplash.com/photo-1757359056339-22968344cce6',
-  'sliding,door,terrace':            'https://images.unsplash.com/photo-1757359056339-22968344cce6',
-  'door,house,entrance':             'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
-  'door,wood,house':                 'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
-  'curtain,door,home':               'https://images.unsplash.com/photo-1714836982299-7a3b6930e2f5',
+  // moustiquaires de fenêtre (vue rapprochée, toile + cadre visibles)
+  'window,sunlight,interior,plants': 'https://images.unsplash.com/photo-1693874828904-c3d3573de238',
+  'modern,living,room,window':       'https://images.unsplash.com/photo-1758998222336-d48b2390a686',
+  'window,frame,house':              'https://images.unsplash.com/photo-1758998222336-d48b2390a686',
+  'window,glass,modern':             'https://images.unsplash.com/photo-1693874828904-c3d3573de238',
+  'large,window,villa':              'https://images.unsplash.com/photo-1758998222336-d48b2390a686',
+  // moustiquaires de porte (toile moustiquaire visible sur la porte)
+  'patio,door,glass':                'https://images.unsplash.com/photo-1779430907308-07b21c3f0f58',
+  'sliding,door,terrace':            'https://images.unsplash.com/photo-1779430907308-07b21c3f0f58',
+  'door,house,entrance':             'https://images.unsplash.com/photo-1779430907308-07b21c3f0f58',
+  'door,wood,house':                 'https://images.unsplash.com/photo-1779430907308-07b21c3f0f58',
+  'curtain,door,home':               'https://images.unsplash.com/photo-1779430907308-07b21c3f0f58',
   'craftsman,workshop,aluminium,frame': 'https://images.unsplash.com/photo-1685320198649-781e83a61de4',
   'aluminium,workshop,manufacturing':   'https://images.unsplash.com/photo-1685320198649-781e83a61de4',
   'portrait,woman':              'https://randomuser.me/api/portraits/women/65.jpg',
