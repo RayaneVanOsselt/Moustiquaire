@@ -88,6 +88,42 @@ const Auth = {
     return !!this.user;
   },
 
+  emailExists(email) {
+    for (let key in localStorage) {
+      if (key.startsWith('aeris_user_')) {
+        try {
+          const userData = JSON.parse(localStorage.getItem(key));
+          if (userData.email === email) return true;
+        } catch (e) {}
+      }
+    }
+    return false;
+  },
+
+  resetPassword(email, newPassword) {
+    return new Promise((resolve, reject) => {
+      for (let key in localStorage) {
+        if (key.startsWith('aeris_user_')) {
+          let userData;
+          try { userData = JSON.parse(localStorage.getItem(key)); } catch (e) { continue; }
+          if (userData.email === email) {
+            userData.password = btoa(newPassword);
+            localStorage.setItem(key, JSON.stringify(userData));
+            if (this.user && this.user.email === email) {
+              const updated = { ...userData };
+              delete updated.password;
+              localStorage.setItem('aeris_user', JSON.stringify(updated));
+              this.user = updated;
+            }
+            resolve();
+            return;
+          }
+        }
+      }
+      reject(new Error('Aucun compte associé à cet e-mail'));
+    });
+  },
+
   getUser() {
     return this.user;
   },

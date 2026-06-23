@@ -4,13 +4,15 @@
 
 /* ---------- Photos réelles + repli élégant ----------
    Chaque <img data-kw="window,interior" data-lock="3"> charge une vraie
-   photo par mots-clés. En cas d'échec (hors-ligne), le conteneur .ph
-   bascule sur un dégradé de marque : jamais d'image cassée. */
+   photo via picsum.photos (CDN stable, contrairement à loremflickr qui
+   dépend d'une API Flickr peu fiable). En cas d'échec (hors-ligne), le
+   conteneur .ph bascule sur un dégradé de marque : jamais d'image cassée. */
 function mountPhotos(){
   document.querySelectorAll('img[data-kw]').forEach(img=>{
     const w = img.dataset.w || 1200, h = img.dataset.h || 900;
     const lock = img.dataset.lock || Math.floor(Math.random()*999);
-    const src = `https://loremflickr.com/${w}/${h}/${img.dataset.kw}?lock=${lock}`;
+    const seed = (img.dataset.kw || 'aeris') + '-' + lock;
+    const src = `https://picsum.photos/seed/${encodeURIComponent(seed)}/${w}/${h}`;
 
     // Timeout pour afficher fallback si image prend trop longtemps
     const timeoutId = setTimeout(() => {
@@ -20,7 +22,7 @@ function mountPhotos(){
           box.classList.add('is-fallback');
         }
       }
-    }, 3000);
+    }, 6000);
 
     img.addEventListener('load', () => clearTimeout(timeoutId));
     img.addEventListener('error', () => {
