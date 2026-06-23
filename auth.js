@@ -17,9 +17,15 @@ const Auth = {
     // Vérifier si l'utilisateur est déjà connecté (localStorage)
     const savedUser = localStorage.getItem('aeris_user');
     if (savedUser) {
-      this.user = JSON.parse(savedUser);
-      this.updateUI();
+      try {
+        this.user = JSON.parse(savedUser);
+      } catch (e) {
+        this.user = null;
+        localStorage.removeItem('aeris_user');
+      }
     }
+    // Toujours mettre à jour l'UI (connecté OU non connecté)
+    this.updateUI();
     this.initialized = true;
   },
 
@@ -118,55 +124,49 @@ const Auth = {
     const navCta = document.querySelector('.nav-cta');
     if (!navCta) return;
 
-    // Supprimer l'ancien profil s'il existe
-    const oldProfile = navCta.querySelector('.user-profile');
-    if (oldProfile) oldProfile.remove();
-    const oldLogin = navCta.querySelector('a[href="login.html"]');
-    if (oldLogin) oldLogin.parentElement.remove();
+    // Supprimer l'ancien élément auth (profil OU connexion) — conteneur unique
+    const old = navCta.querySelector('.auth-nav-item');
+    if (old) old.remove();
 
     if (this.user) {
-      // Utilisateur connecté
+      // Utilisateur connecté → menu profil
       const userDiv = document.createElement('div');
-      userDiv.className = 'user-profile';
+      userDiv.className = 'auth-nav-item user-profile';
       userDiv.innerHTML = `
-        <button class="user-btn" id="user-menu-btn">👤 ${this.user.prenom}</button>
-        <div class="user-menu" id="user-menu" style="display:none;position:absolute;top:100%;right:0;background:white;border:1px solid var(--ligne);border-radius:12px;min-width:180px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:1000;margin-top:8px">
+        <button class="user-btn" type="button">👤 ${this.user.prenom}</button>
+        <div class="user-menu" style="display:none;position:absolute;top:100%;right:0;background:#fff;border:1px solid var(--ligne);border-radius:12px;min-width:180px;box-shadow:0 4px 12px rgba(0,0,0,.15);z-index:1000;margin-top:8px;overflow:hidden">
           <a href="profile.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mon Profil</a>
           <a href="orders.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mes Commandes</a>
           <a href="account.html" style="display:block;padding:12px 16px;color:var(--gris);text-decoration:none;border-bottom:1px solid var(--ligne)">Mon Compte</a>
-          <button id="logout-btn" style="width:100%;text-align:left;padding:12px 16px;border:none;background:none;cursor:pointer;color:#d97770;font-family:inherit;font-size:14px">Déconnexion</button>
+          <button type="button" class="logout-btn" style="width:100%;text-align:left;padding:12px 16px;border:none;background:none;cursor:pointer;color:#d97770;font-family:inherit;font-size:14px">Déconnexion</button>
         </div>
       `;
 
       navCta.insertBefore(userDiv, navCta.firstChild);
 
-      setTimeout(() => {
-        const userBtn = document.getElementById('user-menu-btn');
-        const userMenu = document.getElementById('user-menu');
-        const logoutBtn = document.getElementById('logout-btn');
+      // Attacher les événements directement (les éléments sont dans le DOM)
+      const userBtn = userDiv.querySelector('.user-btn');
+      const userMenu = userDiv.querySelector('.user-menu');
+      const logoutBtn = userDiv.querySelector('.logout-btn');
 
-        if (userBtn && userMenu) {
-          userBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
-          });
+      userBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userMenu.style.display = userMenu.style.display === 'none' ? 'block' : 'none';
+      });
 
-          if (logoutBtn) {
-            logoutBtn.addEventListener('click', () => this.logout());
-          }
+      logoutBtn.addEventListener('click', () => this.logout());
 
-          document.addEventListener('click', (e) => {
-            if (!e.target.closest('.user-profile')) {
-              userMenu.style.display = 'none';
-            }
-          });
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.user-profile')) {
+          userMenu.style.display = 'none';
         }
-      }, 10);
+      });
     } else {
-      // Utilisateur pas connecté
+      // Utilisateur non connecté → bouton Connexion
       const loginDiv = document.createElement('div');
+      loginDiv.className = 'auth-nav-item';
       loginDiv.innerHTML = '<a href="login.html" class="btn btn-outline btn-sm">Connexion</a>';
-      navCta.insertBefore(loginDiv.firstChild, navCta.firstChild);
+      navCta.insertBefore(loginDiv, navCta.firstChild);
     }
   }
 };
