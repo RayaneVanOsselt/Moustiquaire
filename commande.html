@@ -79,7 +79,7 @@
   <div class="wrap">
     <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> <a href="panier.html">Panier</a> <span>›</span> Commande</div>
     <h1>Finalisez votre commande</h1>
-    <p>Entrez vos coordonnées. Un devis détaillé vous sera envoyé par e-mail pour confirmation.</p>
+    <p>Entrez vos coordonnées de livraison, puis choisissez votre moyen de paiement à l'étape suivante.</p>
   </div>
 </div>
 
@@ -114,7 +114,7 @@
           <div class="fg"><label for="notes">Demandes spéciales</label><textarea id="notes" name="notes" placeholder="Coloris RAL, pose particulière, etc."></textarea></div>
           
           <div class="submit-btn">
-            <button type="submit" class="btn btn-gold btn-block" id="submitBtn">Envoyer la commande →</button>
+            <button type="submit" class="btn btn-gold btn-block" id="submitBtn">Continuer vers le paiement →</button>
             <button type="button" class="btn btn-outline btn-block" onclick="location.href='panier.html'">Revenir</button>
           </div>
         </form>
@@ -133,7 +133,7 @@
 <footer>
   <div class="wrap">
     <div class="foot-grid">
-      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Stripe</span><span>PayPal</span><span>Bancontact</span><span>Apple&nbsp;Pay</span><span>Google&nbsp;Pay</span></div></div>
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Revolut</span><span>Virement&nbsp;SEPA</span><span>Bancontact</span></div></div>
       <div><h4>Produits</h4><a href="produits.html">Fenêtre</a><a href="produits.html">Porte</a><a href="produits.html">Coulissante</a><a href="produits.html">Plissée</a></div>
       <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
       <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
@@ -204,8 +204,10 @@ document.getElementById('orderForm').addEventListener('submit',async e=>{
 
   const items=Cart.read();
   const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+  const ref='AERIS-'+Date.now().toString().slice(-6);
 
   const formData=new FormData();
+  formData.append('reference',ref);
   formData.append('nom',v('nom'));
   formData.append('prenom',v('prenom'));
   formData.append('email',v('email'));
@@ -217,6 +219,7 @@ document.getElementById('orderForm').addEventListener('submit',async e=>{
   formData.append('notes',v('notes'));
   formData.append('panier',items.map(i=>`${i.name} (x${i.qty||1}) = ${i.price*(i.qty||1)} €`).join(' | '));
   formData.append('total_ttc',total+' €');
+  formData.append('statut_paiement','En attente de paiement');
 
   try{
     document.getElementById('submitBtn').disabled=true;
@@ -229,31 +232,34 @@ document.getElementById('orderForm').addEventListener('submit',async e=>{
     });
 
     if(response.ok){
-      // Sauvegarder la commande dans le profil
-      const items=Cart.read();
-      const total=items.reduce((s,i)=>s+i.price*(i.qty||1),0);
+      // Sauvegarder la commande dans le profil (en attente de paiement)
       Auth.saveOrder({
+        ref: ref,
         items: items.map(i=>`${i.name} (x${i.qty||1})`).join(', '),
         total: total,
         adresse: v('addr'),
-        ville: v('ville')
+        ville: v('ville'),
+        status: 'En attente de paiement'
       });
 
-      document.getElementById('success').classList.add('show');
-      document.getElementById('orderForm').reset();
+      // Transmettre les infos à la page de paiement
+      sessionStorage.setItem('aeris_pending_payment', JSON.stringify({
+        ref: ref, total: total, prenom: v('prenom')
+      }));
+
       Cart.clear();
       Cart.refresh();
-      setTimeout(()=>location.href='orders.html',3000);
+      location.href='paiement.html';
     }else{
       toast('Erreur lors de l\'envoi. Réessayez.');
       document.getElementById('submitBtn').disabled=false;
-      document.getElementById('submitBtn').textContent='Envoyer la commande →';
+      document.getElementById('submitBtn').textContent='Continuer vers le paiement →';
     }
   }catch(err){
     toast('Erreur de connexion. Vérifiez votre connexion internet.');
     console.error(err);
     document.getElementById('submitBtn').disabled=false;
-    document.getElementById('submitBtn').textContent='Envoyer la commande →';
+    document.getElementById('submitBtn').textContent='Continuer vers le paiement →';
   }
 });
 

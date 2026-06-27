@@ -251,6 +251,11 @@
   width: fit-content;
 }
 
+.order-status.pending {
+  background: rgba(212, 175, 106, 0.18);
+  color: #9a7b2e;
+}
+
 @media (max-width: 640px) {
   .auth-container {
     margin: 40px 16px;

@@ -149,7 +149,7 @@ const Auth = {
 
   saveOrder(order) {
     if (!this.user) return;
-    const newOrder = { ...order, id: 'order_' + Date.now(), date: new Date().toISOString(), status: 'Confirmée' };
+    const newOrder = { ...order, id: 'order_' + Date.now(), date: new Date().toISOString(), status: order.status || 'Confirmée' };
     this.user.orders = this.user.orders || [];
     this.user.orders.push(newOrder);
     this.updateProfile({ orders: this.user.orders });

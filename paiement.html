@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Paiement — AÉRIS</title>
+<meta name="description" content="Réglez votre commande de moustiquaire sur mesure AÉRIS en toute sécurité : Revolut ou virement bancaire SEPA." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="auth.css" />
+<link rel="stylesheet" href="chatbot.css" />
+<style>
+  .pay-wrap{max-width:920px;margin:0 auto}
+  /* ---- En-tête montant ---- */
+  .pay-head{background:linear-gradient(150deg,var(--sauge-fonce),var(--sauge-profond));color:#fff;border-radius:var(--r-l);padding:40px;position:relative;overflow:hidden;box-shadow:var(--ombre)}
+  .pay-head::after{content:"";position:absolute;inset:0;opacity:.35;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:30px 30px;mask-image:radial-gradient(circle at 80% 20%,#000,transparent 70%)}
+  .pay-head>*{position:relative;z-index:2}
+  .pay-ref{font-family:var(--data);font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dore)}
+  .pay-head h1{font-size:clamp(24px,3.4vw,32px);color:#fff;margin:10px 0 8px}
+  .pay-head p{color:#cdd8ce;font-size:15px;max-width:52ch;margin-bottom:26px}
+  .pay-amount{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.14);padding-top:22px}
+  .pay-amount .lbl{font-family:var(--data);font-weight:600;font-size:13px;color:#aebfb0;letter-spacing:.04em}
+  .pay-amount .val{font-family:var(--data);font-weight:800;font-size:clamp(34px,6vw,46px);line-height:1;letter-spacing:-.02em}
+  .pay-amount .val span{color:var(--dore)}
+  .pay-amount .chip{margin-left:auto;background:rgba(212,175,106,.16);border:1px solid rgba(212,175,106,.4);color:var(--dore);font-family:var(--data);font-weight:700;font-size:12px;padding:7px 13px;border-radius:100px;letter-spacing:.03em}
+
+  /* ---- Méthodes ---- */
+  .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+  .pay-card{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:28px;position:relative;display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.34,.1,.68,.55),box-shadow .3s,border-color .3s}
+  .pay-card:hover{transform:translateY(-4px);box-shadow:var(--ombre-s)}
+  .pc-badge{position:absolute;top:-11px;left:24px;background:linear-gradient(135deg,var(--dore),var(--dore-2));color:#2a2410;font-family:var(--data);font-weight:800;font-size:11px;letter-spacing:.04em;padding:6px 13px;border-radius:100px;box-shadow:0 4px 12px rgba(212,175,106,.3)}
+  .pc-top{display:flex;align-items:center;gap:13px;margin-bottom:8px}
+  .pc-logo{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none}
+  .pc-logo svg{width:26px;height:26px}
+  .pay-card h3{font-size:18px;font-weight:700;color:var(--anthracite)}
+  .pay-card .pc-sub{font-size:13.5px;color:var(--gris);margin-bottom:20px;line-height:1.5;flex:1}
+
+  /* Revolut (sombre, premium) */
+  .pay-revolut{background:linear-gradient(165deg,#0a0a0d,#1b1d24);border-color:#2a2c34;color:#fff}
+  .pay-revolut h3{color:#fff}
+  .pay-revolut .pc-sub{color:#a9adb8}
+  .pay-revolut .pc-logo{background:#fff}
+  .pay-revolut .pc-logo svg{fill:#0a0a0d}
+  .rev-feats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+  .rev-feats span{font-family:var(--data);font-weight:600;font-size:11.5px;color:#cbd0da;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:5px 11px}
+  .btn-revolut{background:#fff;color:#0a0a0d;border:none;font-weight:800;justify-content:center;width:100%}
+  .btn-revolut:hover{background:#e9eaee;transform:translateY(-2px)}
+  .rev-note{font-size:12px;color:#9398a4;margin-top:14px;line-height:1.55}
+  .rev-note b{color:#fff;font-family:var(--data)}
+
+  /* Virement */
+  .pay-bank .pc-logo{background:linear-gradient(135deg,var(--sable-clair),#f0ebe5)}
+  .pay-bank .pc-logo svg{stroke:var(--sauge);fill:none;stroke-width:1.7}
+  .iban-list{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+  .iban-row{display:flex;align-items:center;gap:12px;background:var(--blanc-casse);border:1px solid var(--ligne);border-radius:12px;padding:11px 14px}
+  .iban-row .ir-k{font-family:var(--data);font-weight:600;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--gris-clair);width:96px;flex:none}
+  .iban-row .ir-v{font-family:var(--data);font-weight:700;font-size:14.5px;color:var(--anthracite);flex:1;letter-spacing:.02em;word-break:break-all}
+  .iban-row .ir-v.iban{letter-spacing:.08em}
+  .ir-copy{flex:none;background:none;border:1px solid var(--ligne);border-radius:9px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;color:var(--gris)}
+  .ir-copy:hover{border-color:var(--sauge);color:var(--sauge);background:rgba(92,129,102,.06)}
+  .ir-copy svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
+  .ir-copy.copied{border-color:var(--sauge);color:#fff;background:var(--sauge)}
+  .ir-copy .ic-check{display:none}
+  .ir-copy.copied .ic-copy{display:none}
+  .ir-copy.copied .ic-check{display:block}
+
+  /* ---- Actions + réassurance ---- */
+  .pay-steps{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:24px 28px;margin-top:22px}
+  .pay-steps h4{font-family:var(--data);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#4a4c45;margin-bottom:14px}
+  .pay-steps ol{margin:0;padding-left:20px;color:var(--gris);font-size:14px;line-height:1.9}
+  .pay-steps ol b{color:var(--anthracite)}
+  .pay-actions{display:flex;gap:14px;margin-top:24px;flex-wrap:wrap}
+  .pay-actions .btn{flex:1;justify-content:center;min-width:200px}
+  .pay-trust{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:24px;color:var(--gris);font-size:13px;font-family:var(--data);font-weight:600}
+  .pay-trust svg{width:16px;height:16px;stroke:var(--sauge);fill:none;stroke-width:1.8}
+
+  /* État vide */
+  .pay-empty{text-align:center;background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:60px 30px;max-width:560px;margin:0 auto}
+  .pay-empty h1{font-size:26px;margin-bottom:12px}
+  .pay-empty p{color:var(--gris);margin-bottom:24px}
+
+  @media(max-width:760px){
+    .pay-head{padding:28px}
+    .pay-methods{grid-template-columns:1fr}
+    .pay-card{padding:24px}
+    .iban-row .ir-k{width:80px}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">Fabrication européenne sur mesure · Livraison estimée <b>10 à 15 jours</b> · Garantie 5 ans</div>
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="logo"><span class="dot"></span>AÉRIS</a>
+    <nav class="nav-links">
+      <a href="produits.html">Produits</a>
+      <a href="configurateur.html">Configurateur</a>
+      <a href="savoir-faire.html">Savoir-faire</a>
+      <a href="faq.html">FAQ</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="configurateur.html" class="btn btn-primary btn-sm">Configurer</a>
+      <button class="cart-btn" aria-label="Panier" onclick="location.href='panier.html'">
+        <svg viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M6 6 5 3H3"/></svg>
+        <span class="cart-count">0</span>
+      </button>
+      <button class="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+  <nav class="mobile-menu">
+    <a href="produits.html">Produits</a>
+    <a href="configurateur.html">Configurateur</a>
+    <a href="savoir-faire.html">Savoir-faire</a>
+    <a href="faq.html">FAQ</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+</header>
+
+<div class="page-head">
+  <div class="wrap">
+    <div class="crumb"><a href="index.html">Accueil</a> <span>›</span> <a href="panier.html">Panier</a> <span>›</span> <a href="commande.html">Commande</a> <span>›</span> Paiement</div>
+    <h1>Paiement sécurisé</h1>
+    <p>Dernière étape : réglez votre commande pour lancer la fabrication.</p>
+  </div>
+</div>
+
+<section>
+  <div class="wrap">
+    <div class="pay-wrap" id="payWrap">
+      <!-- En-tête montant -->
+      <div class="pay-head">
+        <div class="pay-ref">Commande <span id="ref">—</span></div>
+        <h1>Merci <span id="prenom"></span>, finalisez votre paiement</h1>
+        <p>Votre commande est bien enregistrée. Choisissez l'un des moyens de paiement ci-dessous. <b style="color:#fff">La fabrication démarre dès réception du paiement.</b></p>
+        <div class="pay-amount">
+          <div>
+            <div class="lbl">Montant à régler</div>
+            <div class="val" id="amount">— <span>€</span></div>
+          </div>
+          <span class="chip">En attente de paiement</span>
+        </div>
+      </div>
+
+      <!-- Méthodes -->
+      <div class="pay-methods">
+        <!-- Revolut -->
+        <div class="pay-card pay-revolut">
+          <div class="pc-badge">Recommandé · instantané</div>
+          <div class="pc-top">
+            <div class="pc-logo">
+              <svg viewBox="0 0 24 24"><path d="M4 3h7.2c3 0 5 1.9 5 4.7 0 2.3-1.4 4-3.6 4.5L17.6 21h-3.8l-3.4-7.8H7.4V21H4V3Zm3.4 3v4.7h3.4c1.4 0 2.3-.9 2.3-2.3 0-1.5-.9-2.4-2.3-2.4H7.4Z"/></svg>
+            </div>
+            <h3>Payer avec Revolut</h3>
+          </div>
+          <p class="pc-sub">Le plus rapide : le paiement est reçu immédiatement, sans frais pour vous.</p>
+          <div class="rev-feats"><span>⚡ Instantané</span><span>🔒 Sécurisé</span><span>0 € de frais</span></div>
+          <a class="btn btn-revolut" id="revBtn" href="https://revolut.me/rvanosselt0808" target="_blank" rel="noopener">Ouvrir Revolut →</a>
+          <p class="rev-note">Dans Revolut, indiquez le montant <b id="revAmount">—</b> et la communication <b id="revRef">—</b> afin que nous identifiions votre paiement.</p>
+        </div>
+
+        <!-- Virement -->
+        <div class="pay-card pay-bank">
+          <div class="pc-top">
+            <div class="pc-logo">
+              <svg viewBox="0 0 24 24"><path d="M3 10 12 4l9 6"/><path d="M5 10v8M19 10v8M9 10v8M15 10v8"/><path d="M3 21h18"/></svg>
+            </div>
+            <h3>Virement bancaire</h3>
+          </div>
+          <p class="pc-sub">Depuis n'importe quelle banque (SEPA). Copiez les informations ci-dessous.</p>
+          <div class="iban-list">
+            <div class="iban-row">
+              <span class="ir-k">Bénéficiaire</span>
+              <span class="ir-v">AÉRIS</span>
+              <button class="ir-copy" data-copy="AÉRIS" aria-label="Copier le bénéficiaire" onclick="copyVal(this)">
+                <svg class="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <svg class="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+            </div>
+            <div class="iban-row">
+              <span class="ir-k">IBAN</span>
+              <span class="ir-v iban">BE96 3771 4947 3805</span>
+              <button class="ir-copy" data-copy="BE96377149473805" aria-label="Copier l'IBAN" onclick="copyVal(this)">
+                <svg class="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <svg class="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+            </div>
+            <div class="iban-row">
+              <span class="ir-k">Communication</span>
+              <span class="ir-v" id="bankRef">—</span>
+              <button class="ir-copy" id="bankRefCopy" data-copy="" aria-label="Copier la communication" onclick="copyVal(this)">
+                <svg class="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <svg class="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+            </div>
+            <div class="iban-row">
+              <span class="ir-k">Montant</span>
+              <span class="ir-v" id="bankAmount">—</span>
+              <button class="ir-copy" id="bankAmountCopy" data-copy="" aria-label="Copier le montant" onclick="copyVal(this)">
+                <svg class="ic-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>
+                <svg class="ic-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Étapes -->
+      <div class="pay-steps">
+        <h4>Comment ça se passe ?</h4>
+        <ol>
+          <li>Effectuez le paiement via <b>Revolut</b> ou <b>virement</b> en indiquant la communication <b id="stepRef">—</b>.</li>
+          <li>Nous confirmons la réception par e-mail, généralement sous 24 h ouvrées.</li>
+          <li>La <b>fabrication sur mesure démarre</b> et votre commande est livrée sous 10 à 21 jours.</li>
+        </ol>
+      </div>
+
+      <div class="pay-actions">
+        <a class="btn btn-gold" href="orders.html">J'ai effectué le paiement →</a>
+        <a class="btn btn-outline" href="produits.html">Continuer mes achats</a>
+      </div>
+
+      <div class="pay-trust">
+        <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+        Vos informations bancaires ne transitent jamais par notre site. Paiement direct, 100 % sécurisé.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div><div class="logo"><span class="dot"></span>AÉRIS</div><p class="blurb">Moustiquaires sur mesure fabriquées en Europe.</p><div class="pay"><span>Revolut</span><span>Virement&nbsp;SEPA</span><span>Bancontact</span></div></div>
+      <div><h4>Aide</h4><a href="faq.html">FAQ</a><a href="faq.html">Livraison</a><a href="faq.html">Garantie</a></div>
+      <div><h4>Société</h4><a href="savoir-faire.html">Savoir-faire</a><a href="contact.html">Contact</a></div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé</span></div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script src="auth.js"></script>
+<script>
+const fmt = n => (n||0).toLocaleString('fr-BE');
+
+function copyVal(btn){
+  const val = btn.getAttribute('data-copy') || '';
+  if(!val) return;
+  const done = () => {
+    btn.classList.add('copied');
+    toast('Copié ✓');
+    setTimeout(() => btn.classList.remove('copied'), 1600);
+  };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(val).then(done).catch(() => fallbackCopy(val, done));
+  } else {
+    fallbackCopy(val, done);
+  }
+}
+function fallbackCopy(val, done){
+  const ta = document.createElement('textarea');
+  ta.value = val; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); done(); } catch(e){}
+  document.body.removeChild(ta);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  let data = null;
+  try { data = JSON.parse(sessionStorage.getItem('aeris_pending_payment')); } catch(e){}
+
+  if(!data || !data.ref){
+    document.getElementById('payWrap').innerHTML =
+      '<div class="pay-empty"><h1>Aucun paiement en attente</h1><p>Vous n\'avez pas de commande à régler pour le moment. Configurez votre moustiquaire pour passer commande.</p><a href="configurateur.html" class="btn btn-primary">Configurer ma moustiquaire</a> &nbsp; <a href="orders.html" class="btn btn-outline">Mes commandes</a></div>';
+    return;
+  }
+
+  const amountTxt = fmt(data.total) + ' €';
+  document.getElementById('ref').textContent = data.ref;
+  document.getElementById('prenom').textContent = data.prenom ? data.prenom : '';
+  document.getElementById('amount').innerHTML = fmt(data.total) + ' <span>€</span>';
+  document.getElementById('revAmount').textContent = amountTxt;
+  document.getElementById('revRef').textContent = data.ref;
+  document.getElementById('bankRef').textContent = data.ref;
+  document.getElementById('bankAmount').textContent = amountTxt;
+  document.getElementById('stepRef').textContent = data.ref;
+  document.getElementById('bankRefCopy').setAttribute('data-copy', data.ref);
+  document.getElementById('bankAmountCopy').setAttribute('data-copy', fmt(data.total));
+});
+</script>
+<script src="chatbot.js"></script>
+</body>
+</html>
