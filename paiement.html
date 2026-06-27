@@ -82,11 +82,29 @@
   .pay-empty h1{font-size:26px;margin-bottom:12px}
   .pay-empty p{color:var(--gris);margin-bottom:24px}
 
+  /* ---- Fenêtre (modal) de confirmation ---- */
+  .pay-modal{position:fixed;inset:0;background:rgba(26,26,24,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:300;padding:20px}
+  .pay-modal.open{display:flex}
+  .pay-modal-box{background:#fff;border-radius:var(--r-l);padding:36px;max-width:440px;width:100%;text-align:center;box-shadow:var(--ombre-lg);animation:modalIn .3s cubic-bezier(.2,.7,.3,1)}
+  @keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
+  .pm-icon{width:64px;height:64px;border-radius:50%;background:var(--sable-clair);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 18px}
+  .pm-icon.pm-ok{background:var(--sauge);color:#fff;font-weight:800;font-size:32px}
+  .pay-modal-box h3{font-size:21px;margin-bottom:10px;color:var(--anthracite)}
+  .pay-modal-box p{color:var(--gris);font-size:14.5px;line-height:1.6;margin-bottom:22px}
+  .pay-modal-box p b{color:var(--anthracite);font-family:var(--data)}
+  .pm-method{text-align:left;margin-bottom:22px}
+  .pm-method label{font-family:var(--data);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--gris);display:block;margin-bottom:10px}
+  .pm-choices{display:flex;gap:10px}
+  .pm-choice{flex:1;padding:11px;border:1.5px solid var(--ligne);border-radius:12px;background:#fff;font-family:var(--data);font-weight:700;font-size:14px;cursor:pointer;transition:.2s;color:var(--gris)}
+  .pm-choice.active{border-color:var(--sauge);background:rgba(92,129,102,.08);color:var(--sauge-fonce)}
+  .pm-actions{display:flex;flex-direction:column;gap:10px}
+
   @media(max-width:760px){
     .pay-head{padding:28px}
     .pay-methods{grid-template-columns:1fr}
     .pay-card{padding:24px}
     .iban-row .ir-k{width:80px}
+    .pay-modal-box{padding:28px}
   }
 </style>
 </head>
@@ -221,7 +239,7 @@
       </div>
 
       <div class="pay-actions">
-        <a class="btn btn-gold" href="orders.html">J'ai effectué le paiement →</a>
+        <button type="button" class="btn btn-gold" id="paidBtn">J'ai effectué le paiement →</button>
         <a class="btn btn-outline" href="produits.html">Continuer mes achats</a>
       </div>
 
@@ -243,6 +261,34 @@
     <div class="foot-bottom"><span>© 2026 AÉRIS — Tous droits réservés.</span><span class="ssl"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Paiement sécurisé</span></div>
   </div>
 </footer>
+
+<!-- Fenêtre de confirmation de paiement -->
+<div class="pay-modal" id="payModal" aria-hidden="true">
+  <div class="pay-modal-box">
+    <div id="modalConfirm">
+      <div class="pm-icon">💳</div>
+      <h3>Confirmer votre paiement</h3>
+      <p>Vous confirmez avoir réglé <b id="mAmount">—</b> pour la commande <b id="mRef">—</b> ?</p>
+      <div class="pm-method">
+        <label>Méthode utilisée</label>
+        <div class="pm-choices">
+          <button type="button" class="pm-choice active" data-method="Revolut">Revolut</button>
+          <button type="button" class="pm-choice" data-method="Virement bancaire">Virement</button>
+        </div>
+      </div>
+      <div class="pm-actions">
+        <button type="button" class="btn btn-gold btn-block" id="mConfirmBtn">Oui, j'ai payé →</button>
+        <button type="button" class="btn btn-outline btn-block" id="mCancelBtn">Annuler</button>
+      </div>
+    </div>
+    <div id="modalSuccess" style="display:none">
+      <div class="pm-icon pm-ok">✓</div>
+      <h3>Merci, paiement signalé !</h3>
+      <p>Nous vérifions la réception de votre paiement et confirmons votre commande par e-mail, généralement sous 24 h ouvrées. La fabrication démarre dès confirmation.</p>
+      <a class="btn btn-primary btn-block" href="orders.html">Voir mes commandes →</a>
+    </div>
+  </div>
+</div>
 
 <script src="app.js"></script>
 <script src="auth.js"></script>
@@ -271,16 +317,19 @@ function fallbackCopy(val, done){
   document.body.removeChild(ta);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  let data = null;
-  try { data = JSON.parse(sessionStorage.getItem('aeris_pending_payment')); } catch(e){}
+let paymentData = null;
+let chosenMethod = 'Revolut';
 
-  if(!data || !data.ref){
+document.addEventListener('DOMContentLoaded', () => {
+  try { paymentData = JSON.parse(sessionStorage.getItem('aeris_pending_payment')); } catch(e){}
+
+  if(!paymentData || !paymentData.ref){
     document.getElementById('payWrap').innerHTML =
       '<div class="pay-empty"><h1>Aucun paiement en attente</h1><p>Vous n\'avez pas de commande à régler pour le moment. Configurez votre moustiquaire pour passer commande.</p><a href="configurateur.html" class="btn btn-primary">Configurer ma moustiquaire</a> &nbsp; <a href="orders.html" class="btn btn-outline">Mes commandes</a></div>';
     return;
   }
 
+  const data = paymentData;
   const amountTxt = fmt(data.total) + ' €';
   document.getElementById('ref').textContent = data.ref;
   document.getElementById('prenom').textContent = data.prenom ? data.prenom : '';
@@ -292,6 +341,69 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('stepRef').textContent = data.ref;
   document.getElementById('bankRefCopy').setAttribute('data-copy', data.ref);
   document.getElementById('bankAmountCopy').setAttribute('data-copy', fmt(data.total));
+
+  // Pré-remplir la fenêtre de confirmation
+  document.getElementById('mAmount').textContent = amountTxt;
+  document.getElementById('mRef').textContent = data.ref;
+
+  // Ouvrir la fenêtre de confirmation
+  document.getElementById('paidBtn').addEventListener('click', () => {
+    document.getElementById('payModal').classList.add('open');
+    document.getElementById('payModal').setAttribute('aria-hidden', 'false');
+  });
+});
+
+// Choix de la méthode
+document.querySelectorAll('.pm-choice').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.pm-choice').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    chosenMethod = btn.getAttribute('data-method');
+  });
+});
+
+function closeModal(){
+  document.getElementById('payModal').classList.remove('open');
+  document.getElementById('payModal').setAttribute('aria-hidden', 'true');
+}
+document.getElementById('mCancelBtn').addEventListener('click', closeModal);
+document.getElementById('payModal').addEventListener('click', (e) => {
+  if(e.target.id === 'payModal') closeModal();
+});
+
+// Confirmation du paiement par le client
+document.getElementById('mConfirmBtn').addEventListener('click', async () => {
+  if(!paymentData) return;
+  const btn = document.getElementById('mConfirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Envoi en cours…';
+
+  const user = (typeof Auth !== 'undefined' && Auth.getUser) ? Auth.getUser() : null;
+
+  // Prévenir l'administrateur par e-mail qu'un paiement a été signalé
+  try {
+    const fd = new FormData();
+    fd.append('_subject', 'Paiement signalé — ' + paymentData.ref);
+    fd.append('type', 'Le client signale avoir payé');
+    fd.append('reference', paymentData.ref);
+    fd.append('montant', fmt(paymentData.total) + ' €');
+    fd.append('methode', chosenMethod);
+    fd.append('client', user ? ((user.prenom||'') + ' ' + (user.nom||'')) : (paymentData.prenom||''));
+    fd.append('email', user ? (user.email||'') : '');
+    await fetch('https://formspree.io/f/xykqgqyj', { method:'POST', body:fd, headers:{'Accept':'application/json'} });
+  } catch(e){ /* on continue même si l'e-mail échoue */ }
+
+  // Mettre à jour le statut de la commande dans le profil
+  if(user && Auth.updateOrderStatus){
+    Auth.updateOrderStatus(paymentData.ref, 'Paiement signalé');
+  }
+
+  // Le paiement est signalé : on retire la commande en attente
+  sessionStorage.removeItem('aeris_pending_payment');
+
+  // Afficher l'écran de remerciement
+  document.getElementById('modalConfirm').style.display = 'none';
+  document.getElementById('modalSuccess').style.display = 'block';
 });
 </script>
 <script src="chatbot.js"></script>

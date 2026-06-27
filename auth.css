@@ -256,6 +256,11 @@
   color: #9a7b2e;
 }
 
+.order-status.signaled {
+  background: rgba(70, 130, 180, 0.15);
+  color: #3a6b8c;
+}
+
 @media (max-width: 640px) {
   .auth-container {
     margin: 40px 16px;

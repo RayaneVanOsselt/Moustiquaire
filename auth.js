@@ -156,6 +156,15 @@ const Auth = {
     return newOrder;
   },
 
+  updateOrderStatus(ref, status) {
+    if (!this.user || !this.user.orders) return;
+    const order = this.user.orders.find(o => o.ref === ref);
+    if (order) {
+      order.status = status;
+      this.updateProfile({ orders: this.user.orders });
+    }
+  },
+
   updateUI() {
     const navCta = document.querySelector('.nav-cta');
     if (!navCta) return;
