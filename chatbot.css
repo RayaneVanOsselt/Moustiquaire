@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(92, 129, 102, 0.3);
+  box-shadow: 0 4px 12px rgba(75, 99, 130, 0.3);
   transition: all 0.3s ease;
   padding: 0;
   border: none;
@@ -24,7 +24,7 @@
 
 .chatbot-bubble:hover {
   transform: scale(1.1);
-  box-shadow: 0 6px 16px rgba(92, 129, 102, 0.4);
+  box-shadow: 0 6px 16px rgba(75, 99, 130, 0.4);
 }
 
 .chatbot-bubble svg {
@@ -121,7 +121,7 @@
 
 .chatbot-msg-bot {
   background: white;
-  color: var(--gris, #4a4c45);
+  color: var(--gris, #5a6472);
   border: 1px solid var(--ligne, #e5e5e0);
   margin-right: auto;
   border-radius: 4px 12px 12px 12px;
@@ -180,7 +180,7 @@
 }
 
 #chatbot-send:hover {
-  background: var(--sauge-fonce, #4a6654);
+  background: var(--sauge-fonce, #1b2c48);
 }
 
 @media (max-width: 480px) {

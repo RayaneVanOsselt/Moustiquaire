@@ -22,7 +22,7 @@
   .config-grid{display:grid;grid-template-columns:1fr .92fr;gap:36px;align-items:start;margin-top:-40px;position:relative;z-index:5}
   .panel{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:32px;box-shadow:var(--ombre)}
   .field{margin-bottom:24px}
-  .field>label{font-family:var(--data);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#4a4c45;display:block;margin-bottom:12px}
+  .field>label{font-family:var(--data);font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;color:#5a6472;display:block;margin-bottom:12px}
   .chips{display:flex;flex-wrap:wrap;gap:9px}
   .chip{font-family:var(--data);font-weight:600;font-size:13.5px;padding:9px 15px;border-radius:100px;border:1px solid var(--ligne);background:#fff;cursor:pointer;transition:.2s}
   .chip:hover{border-color:var(--sauge)}
@@ -38,11 +38,11 @@
   input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:var(--sauge);cursor:pointer;border:3px solid #fff}
   .swatches{display:flex;gap:11px;flex-wrap:wrap}
   .sw{width:40px;height:40px;border-radius:11px;cursor:pointer;border:2px solid transparent;transition:.2s}
-  .sw.active{border-color:var(--dore);box-shadow:0 0 0 3px rgba(198,167,106,.18)}
+  .sw.active{border-color:var(--dore);box-shadow:0 0 0 3px rgba(166,136,104,.18)}
   .opts{display:flex;flex-direction:column;gap:10px}
   .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--ligne);border-radius:13px;padding:12px 15px;cursor:pointer;transition:.2s}
   .opt:hover{border-color:var(--sauge)}
-  .opt.active{border-color:var(--sauge);background:rgba(107,142,117,.06)}
+  .opt.active{border-color:var(--sauge);background:rgba(75,99,130,.06)}
   .opt .l{display:flex;align-items:center;gap:11px;font-size:14.5px}
   .opt .check{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--ligne);display:flex;align-items:center;justify-content:center;flex:none}
   .opt.active .check{background:var(--sauge);border-color:var(--sauge)}
@@ -52,7 +52,7 @@
   .preview{background:linear-gradient(160deg,#fff,#f6f2ea);border:1px solid var(--ligne);border-radius:var(--r-l);padding:30px;display:flex;align-items:center;justify-content:center;min-height:320px}
   .pv-stage{display:flex;flex-direction:column;align-items:center;gap:14px}
   .pv-frame{border-style:solid;border-radius:6px;transition:all .45s cubic-bezier(.2,.7,.3,1);position:relative;
-    background-image:repeating-linear-gradient(0deg,rgba(40,55,45,.16) 0 1px,transparent 1px 5px),repeating-linear-gradient(90deg,rgba(40,55,45,.16) 0 1px,transparent 1px 5px);box-shadow:var(--ombre)}
+    background-image:repeating-linear-gradient(0deg,rgba(27,44,72,.16) 0 1px,transparent 1px 5px),repeating-linear-gradient(90deg,rgba(27,44,72,.16) 0 1px,transparent 1px 5px);box-shadow:var(--ombre)}
   .pv-frame .pv-grip{position:absolute;top:50%;right:-4px;transform:translateY(-50%);width:7px;height:30px;border-radius:4px;background:var(--dore)}
   .pv-dim{font-family:var(--data);font-weight:700;font-size:12.5px;color:var(--gris);letter-spacing:.05em}
   .price-card{background:var(--sauge-fonce);color:#fff;border-radius:var(--r-l);padding:28px}
@@ -179,7 +179,7 @@ const COLORS=[
   {id:'anthracite',n:'Anthracite',hex:'#33373A'},
   {id:'sable',n:'Sable',hex:'#C9B896'},
   {id:'noir',n:'Noir mat',hex:'#1C1C1C'},
-  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#4B6382,#C6A76A)'},
+  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#4B6382,#a68868)'},
 ];
 const OPTS=[
   {id:'poignee',n:'Poignée premium',p:19},
@@ -235,7 +235,7 @@ function update(){
   const col=COLORS.find(c=>c.id===state.color),frame=$('#pvFrame');
   frame.style.width=pw+'px';frame.style.height=ph+'px';
   frame.style.borderWidth=(state.opts.has('renfort')?'11px':'8px');
-  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#4B6382,#C6A76A) 1';frame.style.borderColor='#4B6382';}
+  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#4B6382,#a68868) 1';frame.style.borderColor='#4B6382';}
   else{frame.style.borderImage='none';frame.style.borderColor=col.hex;}
 }
 build();
