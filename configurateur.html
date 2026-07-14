@@ -56,13 +56,13 @@
   .pv-frame .pv-grip{position:absolute;top:50%;right:-4px;transform:translateY(-50%);width:7px;height:30px;border-radius:4px;background:var(--dore)}
   .pv-dim{font-family:var(--data);font-weight:700;font-size:12.5px;color:var(--gris);letter-spacing:.05em}
   .price-card{background:var(--sauge-fonce);color:#fff;border-radius:var(--r-l);padding:28px}
-  .price-card .lbl{font-family:var(--data);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#aebfb0}
+  .price-card .lbl{font-family:var(--data);font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#a6b4c6}
   .price-card .amount{font-family:var(--data);font-weight:800;font-size:48px;letter-spacing:-.02em;line-height:1;margin:8px 0 4px}
   .price-card .amount span.eur{font-size:26px;color:var(--dore)}
-  .price-card .vat{font-size:12.5px;color:#aebfb0}
+  .price-card .vat{font-size:12.5px;color:#a6b4c6}
   .price-meta{display:flex;gap:10px;margin:22px 0;border-top:1px solid rgba(255,255,255,.12);padding-top:20px}
   .price-meta .m{flex:1}
-  .price-meta .m .k{font-size:11px;color:#aebfb0;font-family:var(--data);font-weight:600;letter-spacing:.04em}
+  .price-meta .m .k{font-size:11px;color:#a6b4c6;font-family:var(--data);font-weight:600;letter-spacing:.04em}
   .price-meta .m .v{font-family:var(--data);font-weight:700;font-size:15px;color:#fff;margin-top:3px}
   .price-actions{display:flex;flex-direction:column;gap:10px}
   @media(max-width:980px){.config-grid{grid-template-columns:1fr}.preview-col{position:static}.panel{padding:24px}.dims{grid-template-columns:1fr}}
@@ -179,7 +179,7 @@ const COLORS=[
   {id:'anthracite',n:'Anthracite',hex:'#33373A'},
   {id:'sable',n:'Sable',hex:'#C9B896'},
   {id:'noir',n:'Noir mat',hex:'#1C1C1C'},
-  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#73866D,#C6A76A)'},
+  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#4B6382,#C6A76A)'},
 ];
 const OPTS=[
   {id:'poignee',n:'Poignée premium',p:19},
@@ -235,7 +235,7 @@ function update(){
   const col=COLORS.find(c=>c.id===state.color),frame=$('#pvFrame');
   frame.style.width=pw+'px';frame.style.height=ph+'px';
   frame.style.borderWidth=(state.opts.has('renfort')?'11px':'8px');
-  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#73866D,#C6A76A) 1';frame.style.borderColor='#73866D';}
+  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#4B6382,#C6A76A) 1';frame.style.borderColor='#4B6382';}
   else{frame.style.borderImage='none';frame.style.borderColor=col.hex;}
 }
 build();

@@ -20,18 +20,18 @@
   .pay-head>*{position:relative;z-index:2}
   .pay-ref{font-family:var(--data);font-weight:700;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dore)}
   .pay-head h1{font-size:clamp(24px,3.4vw,32px);color:#fff;margin:10px 0 8px}
-  .pay-head p{color:#cdd8ce;font-size:15px;max-width:52ch;margin-bottom:26px}
+  .pay-head p{color:#ccd6e4;font-size:15px;max-width:52ch;margin-bottom:26px}
   .pay-amount{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.14);padding-top:22px}
-  .pay-amount .lbl{font-family:var(--data);font-weight:600;font-size:13px;color:#aebfb0;letter-spacing:.04em}
+  .pay-amount .lbl{font-family:var(--data);font-weight:600;font-size:13px;color:#a6b4c6;letter-spacing:.04em}
   .pay-amount .val{font-family:var(--data);font-weight:800;font-size:clamp(34px,6vw,46px);line-height:1;letter-spacing:-.02em}
   .pay-amount .val span{color:var(--dore)}
-  .pay-amount .chip{margin-left:auto;background:rgba(234,169,61,.16);border:1px solid rgba(234,169,61,.4);color:var(--dore);font-family:var(--data);font-weight:700;font-size:12px;padding:7px 13px;border-radius:100px;letter-spacing:.03em}
+  .pay-amount .chip{margin-left:auto;background:rgba(166,136,104,.16);border:1px solid rgba(166,136,104,.4);color:var(--dore);font-family:var(--data);font-weight:700;font-size:12px;padding:7px 13px;border-radius:100px;letter-spacing:.03em}
 
   /* ---- Méthodes ---- */
   .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
   .pay-card{background:#fff;border:1px solid var(--ligne);border-radius:var(--r-l);padding:28px;position:relative;display:flex;flex-direction:column;transition:transform .3s cubic-bezier(.34,.1,.68,.55),box-shadow .3s,border-color .3s}
   .pay-card:hover{transform:translateY(-4px);box-shadow:var(--ombre-s)}
-  .pc-badge{position:absolute;top:-11px;left:24px;background:linear-gradient(135deg,var(--dore),var(--dore-2));color:#2a2410;font-family:var(--data);font-weight:800;font-size:11px;letter-spacing:.04em;padding:6px 13px;border-radius:100px;box-shadow:0 4px 12px rgba(234,169,61,.3)}
+  .pc-badge{position:absolute;top:-11px;left:24px;background:linear-gradient(135deg,var(--dore),var(--dore-2));color:#2a2410;font-family:var(--data);font-weight:800;font-size:11px;letter-spacing:.04em;padding:6px 13px;border-radius:100px;box-shadow:0 4px 12px rgba(166,136,104,.3)}
   .pc-top{display:flex;align-items:center;gap:13px;margin-bottom:8px}
   .pc-logo{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;flex:none}
   .pc-logo svg{width:26px;height:26px}
@@ -60,7 +60,7 @@
   .iban-row .ir-v{font-family:var(--data);font-weight:700;font-size:14.5px;color:var(--anthracite);flex:1;letter-spacing:.02em;word-break:break-all}
   .iban-row .ir-v.iban{letter-spacing:.08em}
   .ir-copy{flex:none;background:none;border:1px solid var(--ligne);border-radius:9px;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s;color:var(--gris)}
-  .ir-copy:hover{border-color:var(--sauge);color:var(--sauge);background:rgba(115,134,109,.06)}
+  .ir-copy:hover{border-color:var(--sauge);color:var(--sauge);background:rgba(75,99,130,.06)}
   .ir-copy svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}
   .ir-copy.copied{border-color:var(--sauge);color:#fff;background:var(--sauge)}
   .ir-copy .ic-check{display:none}
@@ -96,7 +96,7 @@
   .pm-method label{font-family:var(--data);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--gris);display:block;margin-bottom:10px}
   .pm-choices{display:flex;gap:10px}
   .pm-choice{flex:1;padding:11px;border:1.5px solid var(--ligne);border-radius:12px;background:#fff;font-family:var(--data);font-weight:700;font-size:14px;cursor:pointer;transition:.2s;color:var(--gris)}
-  .pm-choice.active{border-color:var(--sauge);background:rgba(115,134,109,.08);color:var(--sauge-fonce)}
+  .pm-choice.active{border-color:var(--sauge);background:rgba(75,99,130,.08);color:var(--sauge-fonce)}
   .pm-actions{display:flex;flex-direction:column;gap:10px}
 
   @media(max-width:760px){
