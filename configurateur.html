@@ -14,7 +14,7 @@
 <link rel="canonical" href="https://RayaneVanOsselt.github.io/Moustiquaire/configurateur.html" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="styles.css" />
 <link rel="stylesheet" href="auth.css" />
 <link rel="stylesheet" href="chatbot.css" />
@@ -179,7 +179,7 @@ const COLORS=[
   {id:'anthracite',n:'Anthracite',hex:'#33373A'},
   {id:'sable',n:'Sable',hex:'#C9B896'},
   {id:'noir',n:'Noir mat',hex:'#1C1C1C'},
-  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#6B8E75,#C6A76A)'},
+  {id:'ral',n:'RAL sur mesure',hex:'linear-gradient(135deg,#73866D,#C6A76A)'},
 ];
 const OPTS=[
   {id:'poignee',n:'Poignée premium',p:19},
@@ -235,7 +235,7 @@ function update(){
   const col=COLORS.find(c=>c.id===state.color),frame=$('#pvFrame');
   frame.style.width=pw+'px';frame.style.height=ph+'px';
   frame.style.borderWidth=(state.opts.has('renfort')?'11px':'8px');
-  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#6B8E75,#C6A76A) 1';frame.style.borderColor='#6B8E75';}
+  if(col.id==='ral'){frame.style.borderImage='linear-gradient(135deg,#73866D,#C6A76A) 1';frame.style.borderColor='#73866D';}
   else{frame.style.borderImage='none';frame.style.borderColor=col.hex;}
 }
 build();
